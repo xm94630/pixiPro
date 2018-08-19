@@ -1,0 +1,23 @@
+{
+  "name": "pixipro",
+  "version": "1.0.0",
+  "description": "游戏开发",
+  "main": "index.js",
+  "scripts": {
+    "dev": "lite-server -c serverConfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xm94630/pixiPro.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xm94630/pixiPro/issues"
+  },
+  "homepage": "https://github.com/xm94630/pixiPro#readme",
+  "devDependencies": {
+    "lite-server": "^2.4.0"
+  }
+}
