@@ -38,8 +38,31 @@
 
 
     function setup() {
-      let cat = new PIXI.Sprite(PIXI.TextureCache["bg.jpg"]);
-      app.stage.addChild(cat);
+      //let cat = new PIXI.Sprite(PIXI.TextureCache["bg.jpg"]);
+      //app.stage.addChild(cat);
+
+      var titleContainer = new PIXI.Container();
+      titleContainer.scale.x = titleContainer.scale.y = 1;
+      app.stage.addChild(titleContainer);
+      titleContainer.visible = true;
+
+
+      let titleText = new PIXI.Text("你", {fontFamily:"Conv_monogram", fontSize:100, fill:"white"})
+      titleText.anchor.set(0.5,0.5);
+      titleText.position.set(100,100);
+      titleContainer.addChild(titleText);
+
+      //Create the box
+      box = new PIXI.Graphics();
+      box.beginFill(0xCCFF99);
+      box.drawRect(0, 0, 64, 64);
+      box.endFill();
+      box.x = 10;
+      box.y = 10;
+      app.stage.addChild(box);
+
+ 
+        
     }
 
 
@@ -80,6 +103,8 @@
       app.view.style.display="none"; 
       ele.style.display="block"; 
     }
+
+
 
   </script>
 </body>

@@ -23,8 +23,8 @@ var Game = {
          * Resolution where the game is original build for. Used to calculate
          * the new resolution on different devices.
          */
-        width: 1920,
-        height: 1080,
+        width: 580,
+        height:580,
         sound: true,
         music: true,
         particles: false,

@@ -16,7 +16,7 @@ var loadLevel = function(song,thisLevel){
 var stageInfo = [
 
   {
-    title:'Pipe Panorama',
+    title:'zhangsan',
     artist:'Andrew Niehoff',
     difficulty:'Easy',
     highScore:'0000', //getting this to work will require some JSON via Electrum    

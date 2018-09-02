@@ -62,7 +62,7 @@ Game.Menu = {
 
         var top = Game.settings.height * .1;
         var play = new Game.Button({
-            label: '开始按钮'
+            label: '开始按钮--'
         });
         play.position.x = Game.settings.center.x;
         play.position.y = top;
