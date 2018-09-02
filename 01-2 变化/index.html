@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>01</title>
+<title>03</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
 <!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -11,23 +11,20 @@
   }
 </style>
 <body>
+
+  <!-- 该案例完全和案例一样，只是看看文字对其的干扰的影响 -->
+  <!-- 现在看到的正式我想要的情况 -->
+  <div>这里是干扰文字，看看会对全品造成什么影响</div>
+
   <script src="./js/pixi.min.js"></script>
   <script>
     let app = new PIXI.Application({ 
-
-        //本案例的全屏是最简单的形式，仅仅是把画布的大小改成和“窗口宽高而已”
-        //一旦页面中出现其他dom元素（甚至是html的margin之类的）
-        //都会导致“非全屏”
-
-        //实际上真正的全屏，依靠的是对整个元素的“全屏”的实现
-        //即 webkitRequestFullscreen
-
-        width: window.innerWidth, //窗口宽度
+        width: window.innerWidth, 
         height: window.innerHeight,                       
         antialiasing: true, 
         transparent: false, 
         resolution: 1,
-        backgroundColor:0x66cccc  //颜色修改
+        backgroundColor:0x66cccc  
       }
     );
 
@@ -39,11 +36,7 @@
 
 
     function setup() {
-      
-      //这两种写法都是可以的
-      //let cat = new PIXI.Sprite(PIXI.loader.resources["bird.png"].texture);
       let cat = new PIXI.Sprite(PIXI.TextureCache["bird.png"]);
-
       app.stage.addChild(cat);
     }
 
