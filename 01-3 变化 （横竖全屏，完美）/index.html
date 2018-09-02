@@ -47,12 +47,12 @@
     });
     //屏幕旋转
     //补充，其实，旋转也会触发 resize ，这里的可以不用呢
-    //除非你要明确判断当前屏幕是横着的还是竖的
+    //除非你要明确判断当前屏幕是横着的还是竖的（补充，其实也用不着，window.orientation可判断）
     window.addEventListener("orientationchange", function() {
       app.renderer.resize(window.innerWidth, window.innerHeight);
     });
 
-    //加上这两个功能，页面的表现行为已经和那个“4 赌博”案例中的全屏完全一样了！！
+    //加上这两个功能，页面的表现行为已经和那个“4 赌博”案例中的全屏完全一样了！！（但是唯一的缺点是：只兼容safari，微信、chrome都不行的）（用延时执行resize可解决）
     //需要注意的是，这种横竖全屏变化，对于游戏而言，canvas内部的布局也需要调整
     //否则的话，这样子的变化是没有意义的。
 
