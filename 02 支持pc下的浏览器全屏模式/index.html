@@ -1,6 +1,6 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>01</title>
+<title>02</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
 <!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
 <meta name="mobile-web-app-capable" content="yes">
@@ -12,23 +12,15 @@
 </style>
 <body>
   <script src="./js/pixi.min.js"></script>
+  <script src="./js/screenfull.js"></script>
   <script>
     let app = new PIXI.Application({ 
-
-        //本案例的全屏是最简单的形式，仅仅是把画布的大小改成和“窗口宽高而已”
-        //一旦页面中出现其他dom元素（甚至是html的margin之类的）
-        //都会导致“非全屏”
-
-        //还有一种全屏
-        //即 webkitRequestFullscreen
-        //它是对浏览器本身全屏（就像pc中最大化窗口的那种...）
-
-        width: window.innerWidth, //窗口宽度
-        height: window.innerHeight,                       
+        width: 200, 
+        height: 200,                       
         antialiasing: true, 
         transparent: false, 
         resolution: 1,
-        backgroundColor:0x66cccc  //颜色修改
+        backgroundColor:0x66cccc 
       }
     );
 
@@ -38,15 +30,21 @@
       .add("bird.png")
       .load(setup);
 
-
     function setup() {
-      
-      //这两种写法都是可以的
-      //let cat = new PIXI.Sprite(PIXI.loader.resources["bird.png"].texture);
       let cat = new PIXI.Sprite(PIXI.TextureCache["bird.png"]);
-
       app.stage.addChild(cat);
     }
+
+
+
+    //点击开启全屏
+    window.addEventListener("click",function(){
+      if (screenfull.enabled && !screenfull.isFullscreen) {
+                screenfull.request();
+      }else{
+        alert('不支持全屏（我试了下，pc上好像成功了）')
+      }
+    }); 
 
   </script>
 </body>
