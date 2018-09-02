@@ -1,0 +1,7 @@
+node_modules
+bower_components/*
+!bower_components/pixi.js
+bower_components/pixi.js/*
+!bower_components/pixi.js/dist
+bower_components/pixi.js/dist/*
+!bower_components/pixi.js/dist/pixi.js

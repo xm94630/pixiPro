@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: game.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: game.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//setup game constants
+var _container      = PIXI.container;
+var _renderEngine   = PIXI.autoDetectRenderer;
+var _loader         = PIXI.loader;
+var _resources      = PIXI.loader.resources;
+var _sprite         = PIXI.Sprite;
+//var _animSpr        = new PIXI.extras.AnimatedSprite;
+var _ticker         =  new PIXI.ticker.Ticker;
+var _gameWidth      = 500;
+var _gameHeight     = 500;
+var _imgRoot        = "client/img/"; //from index.html location
+var _astroidSpritesSheet = _imgRoot + "astroidsSprite.json";
+var _urls           = [_astroidSpritesSheet];
+var _gameCanvas     = document.getElementById("gameContainer");
+var _gameMaster     = new spriteHandler; //from spriteHandler.js
+var _objPolymorph   = gameObject.sprConstruct;
+
+//Initiate the game state controller
+var _referee = {};
+_objPolymorph(_referee);
+stateController(_referee)
+_gameMaster.initGameSprite(_referee);
+
+//text object for bug tracking
+var _debug = new PIXI.Text("DEBUG: ", {fontSize: 24});
+
+//assign app parameters
+var opts = {};
+opts.autoStart = false;
+opts.width     = _gameWidth;
+opts.height    = _gameHeight;
+opts.backgroundColor = 0x1099bb;
+
+//initialize app
+var app = new PIXI.Application(opts);
+_gameCanvas.appendChild(app.view);
+
+/**
+*    @param {int} x - horizontal axis coordinate to set in canvas
+*    @param {int} y - vertical axis coordiante to set in canvas
+*    @param {object} src - A url reference to collection of textures
+*    @param {string} texture - A url reference to ideal texture
+*    @param {function} call - optional callback assign attributes to new sprite
+*    @returns {obj}  - Ship sprite
+*/
+var addSprite = function(x, y, src, texture, call = false){
+    var img  = _resources[src].textures[texture];
+    var spr = new _sprite(img);
+    spr = _objPolymorph(spr);
+    spr.x = x;
+    spr.y = y;
+
+    if (call &amp;&amp; typeof call === "function") {
+        call(spr);
+    }
+
+    _gameMaster.initGameSprite(spr);
+    return spr;
+}
+
+
+/**
+*    @param {int} x - horizontal axis coordinate to set in canvas
+*    @param {int} y - vertical axis coordiante to set in canvas
+*    @param {object} src - A url reference to collection of textures
+*    @param {string} texture - A url reference to ideal texture
+*    @param {function} call - optional callback assign attributes to new sprite
+*    @returns {obj}  - Ship sprite
+*/
+var addAnimatedSprite = function(x, y, src, textures, call = false){
+    var spr  = PIXI.extras.AnimatedSprite.fromImages(textures)
+    // for(var x = 0; x &lt; textures.length; x++){
+    //     // img.push(_resources[src].textures[x])
+    //     img.push(PIXI.Texture[x])
+    // }
+
+    //var spr = new PIXI.extras.AnimatedSprite(img);
+    //var spr = new _animSpr(img);
+    spr = _objPolymorph(spr);
+    spr.x = x;
+    spr.y = y;
+    spr.animationSpeed = 0.2;
+    spr.loop = true;
+    spr.play();
+    console.log(spr.currentFrame)
+    if (call &amp;&amp; typeof call === "function") {
+        call(spr);
+    }
+
+    _gameMaster.initGameSprite(spr);
+    return spr;
+}
+
+/**
+*    This handles loading game resources
+*    @param {obj} L - A reference to the loader object
+*    @param {array} urls - A collection of resource locations for loading
+*    @param {function} call - Function to run when resources have fully loaded
+*    @returns {bool} - Whether the resources have successfully loaded
+*/
+var preload = function(urls = _urls, L = _loader){
+
+    //Traverse url collection to cache graphics
+    for (var x = 0; x &lt; urls.length; x++){
+        L.add(urls[x]);
+        console.log(urls[x] + ": loaded in the game");
+    }
+    //Load all resources into the game
+    L.load();
+
+    //return value does not effect asynchronous timing
+    return true;
+};
+
+/**
+*    Game loop that will constantly update the state of the game
+*/
+var update = function(){
+    //var lastTime = _ticker.lastTime;
+    requestAnimationFrame(update);
+    //game play logic goes here
+     //var deltaTime = 0;
+     //if lastTime - deltaTime
+    _gameMaster.updateAll(_ticker.deltaTime);
+};
+
+/**
+*   TODO: make this function more modular and testable, add parameters and return value
+*/
+var createPhase = function(){
+    console.log("Everything has loaded!");
+    //ship is the player character
+
+    var shipTextures = [_imgRoot+"sprites/ship2.png",_imgRoot+"sprites/ship1.png",];
+    //var ship = addAnimatedSprite(250, 250, _astroidSpritesSheet, shipTextures, playerShip);
+    var ship = addSprite(250, 250, _astroidSpritesSheet, "ship1.png", playerShip);
+    ship.debug = _debug; //temporary
+    ship.textureIdle = ship.texture;
+    ship.textureThrust = _resources[_astroidSpritesSheet].textures["ship2.png"];
+    ship.alpha = 0.5
+    console.log(ship.alpha);
+
+    var asteroid1 = addSprite(150,100, _astroidSpritesSheet, "rock1.png", asteroidRock);
+    var asteroid2 = addSprite(350,400, _astroidSpritesSheet, "rock2.png", asteroidRock);
+    asteroid1.sizeState = "big";
+    asteroid2.sizeState = "big";
+    //app.stage.addChild(ship.debug);
+    app.stage.addChild(ship);
+    app.stage.addChild(asteroid1);
+    app.stage.addChild(asteroid2);
+    _gameMaster.createAll();
+}
+
+//Make sure resources are loaded before starting game
+_loader.onComplete.add(createPhase);
+
+//Run the game
+(function startGame(){
+
+    console.log(_urls);
+    preload(_urls, _loader);
+     //only needs to be ran once
+    app.render();
+    //_ticker.start();
+    update();
+})()
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gameObject.html">gameObject</a></li><li><a href="spriteHandler.html">spriteHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addAnimatedSprite">addAnimatedSprite</a></li><li><a href="global.html#addSprite">addSprite</a></li><li><a href="global.html#asteroidRock">asteroidRock</a></li><li><a href="global.html#createPhase">createPhase</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#playerBullet">playerBullet</a></li><li><a href="global.html#playerControls">playerControls</a></li><li><a href="global.html#playerShip">playerShip</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#stateController">stateController</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 07 2017 23:02:51 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

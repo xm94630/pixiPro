@@ -1,0 +1,36 @@
+{"frames": {
+
+"walkright_01.png":
+{
+	"frame": {"x":0,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+"walkright_02.png":
+{
+	"frame": {"x":64,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+"walkright_03.png":
+{
+	"frame": {"x":128,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "walkright.png",
+	"format": "RGBA8888",
+	"size": {"w":192,"h":64},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4b7125941a037cf3a405801cbd2f1efe:cc5fb9c2505a950bd8fddd4cc282cd70:edd26dc07f56d250f2ac5cee280489a4$"
+}
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: gameObjects/gameObjectClass.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: gameObjects/gameObjectClass.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+*    @class
+*   A template for all game objects
+*/
+var gameObject = {};
+gameObject.id = 0;       /** @member {Number} */
+gameObject.spd = 1;      /** @member {Number} */
+gameObject.vx = 0;       /** @member {Number} */
+gameObject.vy = 0;       /** @member {Number} */
+gameObject.alive = true; /** @member {Boolean} */
+
+
+/**
+*    Place holder update method for game object, no return values because this method is arbitrary.
+*/
+gameObject.update = function(){};
+
+
+/**
+*    Place holder create method for game object, no return value because this method is arbitrary
+*/
+gameObject.create = function(){};
+
+/**
+*    This method deletes a sprite permanetly from the game
+*    @returnss {number} id number of destroyed sprite
+*/
+gameObject.destroySelf = function(call = false){
+    if (call &amp;&amp; typeof call === "function") call()
+    var id = this.id;
+    app.stage.removeChild(this);
+    delete _gameMaster.spriteList[id];
+    return id;
+}
+
+
+/**
+*    @param {object} spr - Reference to sprite to extend with gameObject attributes
+*    @returns {object} - updated gameObject
+*/
+gameObject.sprConstruct = function(spr) {
+    var attributes = Object.keys(gameObject);
+    for (var x = 0; x &lt; attributes.length; x++){
+        var attr = attributes[x];
+        spr[attr] = gameObject[attr];
+    }
+    return spr;
+}
+
+
+/**
+*    This function checks if a sprite is on the border of a stage and sends it to the opposite side of it is.
+*    TODO: Make this function more modular and testable, replace the game width/height variables with parameters
+*    @param {bool} - Returns true if there's any screen wrap
+*/
+gameObject.screenWrap = function(){
+
+    //These are static values, they need to be adaptable in the future
+    var _gameWidth  = 500;
+    var _gameHeight = 500;
+
+
+    var wrapLeft   = this.x &lt; -this.width/2;
+    var wrapRight  = this.x > _gameWidth + this.width/2;
+    var wrapTop    = this.y &lt; -this.height/2;
+    var wrapBottom = this.y > _gameHeight + this.height/2;
+
+    if (wrapLeft)   this.x  = _gameWidth + this.width/2;
+    if (wrapRight)  this.x  = -this.width/2;
+    if (wrapTop)    this.y  = _gameHeight + this.height/2;
+    if (wrapBottom) this.y = -this.height/2;
+
+    return wrapLeft || wrapRight || wrapTop || wrapBottom;
+}
+
+/**
+*    This method cheks to see if there's a collision with another gameObject
+*    @param {object} spr2 - The sprite that's being checked for a collision
+*    @returnss {bool} - returns true if there is a collision
+*/
+gameObject.collision = function (spr2) {
+
+    //Abstract context of object that's checking for collision
+    var spr1 = this;
+
+    var possibleCollision = false;
+    var combinedHalfWidths;
+    var combinedHalfHeights;
+    var vx;
+    var vy;
+
+    //Find the center points of each sprite
+    spr1.centerX = spr1.x + spr1.width / 2;
+    spr1.centerY = spr1.y + spr1.height / 2;
+    spr2.centerX = spr2.x + spr2.width / 2;
+    spr2.centerY = spr2.y + spr2.height / 2;
+
+    //Find the half-widths and half-heights of each sprite
+    spr1.halfWidth = spr1.width / 2;
+    spr1.halfHeight = spr1.height / 2;
+    spr2.halfWidth = spr2.width / 2;
+    spr2.halfHeight = spr2.height / 2;
+
+    //Calculate the distance vector between the sprites
+    vx = spr1.centerX - spr2.centerX;
+    vy = spr1.centerY - spr2.centerY;
+
+    //Figure out the combined half-widths and half-heights
+    combinedHalfWidths = spr1.halfWidth + spr2.halfWidth;
+    combinedHalfHeights = spr1.halfHeight + spr2.halfHeight;
+
+    var horizontalCollision = Math.abs(vx) &lt; combinedHalfWidths;
+    var verticalCollision   = Math.abs(vy) &lt; combinedHalfHeights;
+    possibleCollision = horizontalCollision &amp;&amp; verticalCollision;
+
+    return possibleCollision;
+};
+
+/**
+*    This method traverses all game objects checking for a collision
+*    @param {array} sprList -a collection of registered gameObjects
+*    @param {function} call - Callback action to take in the case there is a collision
+*    @returnss {string} - ID key with collision results
+*/
+gameObject.singleCollisionCheck = function(sprList, call = false){
+    var self = this;
+    var doSomething = call &amp;&amp; typeof call === "function";
+    var sprID;
+    for (var x in sprList) {
+        if (self.id === sprList[x].id) continue;
+        var collisionCheck = self.collision(sprList[x]);
+        if (collisionCheck){
+            sprID = sprList[x].id;
+            if (doSomething) call(self, sprList[x])
+            break;
+        }
+        sprID = "No sprite IDs found";
+    }
+    return sprID;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="gameObject.html">gameObject</a></li><li><a href="spriteHandler.html">spriteHandler</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addAnimatedSprite">addAnimatedSprite</a></li><li><a href="global.html#addSprite">addSprite</a></li><li><a href="global.html#asteroidRock">asteroidRock</a></li><li><a href="global.html#createPhase">createPhase</a></li><li><a href="global.html#keyboard">keyboard</a></li><li><a href="global.html#playerBullet">playerBullet</a></li><li><a href="global.html#playerControls">playerControls</a></li><li><a href="global.html#playerShip">playerShip</a></li><li><a href="global.html#preload">preload</a></li><li><a href="global.html#stateController">stateController</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Nov 07 2017 23:02:51 GMT-0800 (PST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Pop the Balloons | saca.li</title>
+<!--        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.2.2/pixi.min.js"></script>
+        <script src="pixi/sound.js"></script>
+    </head>
+    <body>
+        <div class="container">
+          <div class="row">
+              <div id="content">
+                  
+                  <script src="pixi/app.js"></script> 
+                  <script src="pixi/pointer.js"></script> 
+                  <script src="pixi/events.js"></script>
+                  <script src="pixi/balloons.js"></script>                  
+                  <script src="pixi/animate.js"></script> 
+                  <script>
+                    //Load the sounds
+                    sounds.load([
+                      "sounds/shoot.wav", 
+                      "sounds/music.wav",
+                    ]);
+
+                    //Assign the callback function that should run
+                    //when the sounds have loaded
+                    sounds.whenLoaded = setup;
+
+                    function setup() {
+                      //Initialize sounds here
+                    }
+
+                    var shoot = sounds["sounds/shoot.wav"],
+                        music = sounds["sounds/music.wav"];
+                  </script>
+              </div>
+          </div>
+        </div>       
+    </body>
+</html>

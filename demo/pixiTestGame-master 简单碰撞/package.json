@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "tui-jsdoc-template": "^1.2.2"
+  }
+}

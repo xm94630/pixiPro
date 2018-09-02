@@ -1,0 +1,57 @@
+{"frames": {
+
+"fireball.png":
+{
+	"frame": {"x":76,"y":0,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"rock1.png":
+{
+	"frame": {"x":0,"y":50,"w":97,"h":82},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":97,"h":82},
+	"sourceSize": {"w":97,"h":82},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"rock2.png":
+{
+	"frame": {"x":0,"y":132,"w":100,"h":87},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":87},
+	"sourceSize": {"w":100,"h":87},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"ship1.png":
+{
+	"frame": {"x":38,"y":0,"w":38,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":38,"h":50},
+	"sourceSize": {"w":38,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"ship2.png":
+{
+	"frame": {"x":0,"y":0,"w":38,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":38,"h":50},
+	"sourceSize": {"w":38,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "astroidsSprite.png",
+	"format": "RGBA8888",
+	"size": {"w":126,"h":219},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:40f8f334621316cbd781fe7b6fa5692a:53c8c43943285ef8b87a00e826627d79:559ed145f587511eb11a04333ccee151$"
+}
+}
