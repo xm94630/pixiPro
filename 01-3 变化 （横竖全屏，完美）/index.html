@@ -46,6 +46,8 @@
       app.renderer.resize(window.innerWidth, window.innerHeight);
     });
     //屏幕旋转
+    //补充，其实，旋转也会触发 resize ，这里的可以不用呢
+    //除非你要明确判断当前屏幕是横着的还是竖的
     window.addEventListener("orientationchange", function() {
       app.renderer.resize(window.innerWidth, window.innerHeight);
     });
