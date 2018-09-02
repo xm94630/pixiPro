@@ -1,0 +1,86 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>4background.jpg</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  html,body{
+    padding:0;
+    margin:0;
+  }
+</style>
+<body>
+
+
+  <div id='info'>请把屏幕横过来游戏~~~</div>
+
+  <script src="./js/pixi.min.js"></script>
+  <script>
+
+    var ele = document.getElementById('info')
+
+    let app = new PIXI.Application({ 
+        width: 0,  //这里一开始设置成0，横过来的时候有延时变化就不明显 
+        height: 0,                        
+        antialiasing: true, 
+        transparent: false, 
+        resolution: 1,
+        backgroundColor:0x66cccc  
+      }
+    );
+
+    document.body.appendChild(app.view);
+
+    PIXI.loader
+      .add("bg.jpg")
+      .load(setup);
+
+
+    function setup() {
+      let cat = new PIXI.Sprite(PIXI.TextureCache["bg.jpg"]);
+      app.stage.addChild(cat);
+    }
+
+
+    window.addEventListener('resize', function(){
+      if (window.orientation == 90 || window.orientation == -90) {
+        heng()
+      }else{
+        shu()
+      }
+    });
+
+
+
+    //判断横竖
+    if (window.orientation == 90 || window.orientation == -90) {
+      heng()
+    }else{
+      shu()
+    }
+
+    function heng(){
+      
+      app.view.style.display="block"; 
+      ele.style.display="none"; 
+
+      //使用这个方法，宽度不能达到（除非在safari中）
+      //app.renderer.resize(window.innerWidth, window.innerHeight);
+      
+      //不过加上一个延时就好啦（大概原因就是，window.innerWidth这个也是在异步地发生变化）
+      //延时10毫秒就差不多了，保险起见就用500毫秒
+      window.setTimeout(function(){
+        app.renderer.resize(window.innerWidth, window.innerHeight);
+      },500)
+
+    }
+
+    function shu(){
+      app.view.style.display="none"; 
+      ele.style.display="block"; 
+    }
+
+  </script>
+</body>
+
