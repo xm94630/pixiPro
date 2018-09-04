@@ -22,34 +22,33 @@
 
   <script src="./js/pixi.min.js"></script>
   <script>
+
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
   
-    var w = 2000;
-    var h = 500;
+    var w = 600;
+    var h = 800;
     var bili = w/h;
     var cat=null;
     var background;
     var app;
 
-
-    var arr = {
-      'cat':{
-        scale:5
-      }
-    }
-
-    app = new PIXI.Application({ 
+    app = PIXI.autoDetectRenderer({ 
         width: w, 
         height: h,                       
-        antialiasing: true, 
-        transparent: false, 
-        resolution: 1  
+        antialiasing: false,
+        transparent: false,
+        resolution: window.devicePixelRatio,
+        autoResize: true,
       }
     );
 
     stage = new PIXI.Container();
+    stage.scale.set(2,1);
+
+
     resize();
-    app.renderer.view.style.position = "absolute"
-    app.renderer.view.style.display = "block";
+    app.view.style.position = "absolute"
+    app.view.style.display = "block";
     document.body.appendChild(app.view);
 
 
@@ -60,47 +59,50 @@
 
     function setup() {
 
-      // background =new PIXI.Sprite(PIXI.loader.resources.background.texture);
-      // background.width=200;
-      // background.height=200;
-      // stage.addChild(background);
-      // app.stage.addChild(stage);
-
-
-      // cat = new PIXI.Sprite(PIXI.TextureCache["background.png"]);
-      // cat.anchor.set(0,0);
-      // cat.position.set(0,0);
-      // cat.scale.x = cat.scale.y = arr.cat.scale;
-      // app.stage.addChild(cat);
-
         background =new PIXI.Sprite(PIXI.loader.resources.background.texture);
+        background.width = 300;
+        background.height = 400;
+
         stage.addChild(background);
-        app.stage.addChild(stage);
-
-
+        app.render(stage);
     }
 
     window.addEventListener('resize', resize);
 
+    //这部分缩放的实现可以进一步优化，可参考案例05
     function resize(){
         var bili2 = window.innerWidth/window.innerHeight;
 
         if(bili2>bili){
-          app.renderer.resize(window.innerHeight*bili, window.innerHeight);
-          app.renderer.view.style.top = 0
-          app.renderer.view.style.left = (window.innerWidth-window.innerHeight*bili)/2+'px'
+          app.resize(window.innerHeight*bili, window.innerHeight);
+          app.view.style.top = 0
+          app.view.style.left = (window.innerWidth-window.innerHeight*bili)/2+'px'
+          
+          //内部元素缩放的重要代码
+          stage.scale.x = stage.scale.y = window.innerHeight/h;
         }else{
-          app.renderer.resize(window.innerWidth, window.innerWidth/bili);
-          app.renderer.view.style.left = 0
-          app.renderer.view.style.top = (window.innerHeight-window.innerWidth/bili)/2+'px'
+          app.resize(window.innerWidth, window.innerWidth/bili);
+          app.view.style.left = 0
+          app.view.style.top = (window.innerHeight-window.innerWidth/bili)/2+'px'
+          
+          //内部元素缩放的重要代码
+          stage.scale.x = stage.scale.y = bili2;
         }
 
-
-
-        app.stage.addChild(stage);
+        app.render(stage);
     }
 
+    //这个根据案例05改变的案例04
+    //我一直在排查案例05中究竟是什么导致内部元素可以和窗口一起缩放！
+    //之前以为是 PIXI.Sprite 后面参数的问题
+    //我找了半天才发现了 stage.scale.x = stage.scale.y 这个核心的实现！
+    //如此说来，我在案例04中已经自己实现了缩放！原理是和这里一模一样的
+    //之所以我还寻找更为便捷的办法的原因是：
+    //案例四我是对一个sprite做的缩放，如果有很多sprites，就会很麻烦。我以为系统会自动解决好这些问题
+    //不过这里我也找到了好的办法，就是container的缩放。然后所有的sprite放到容器中，可以统一缩放处理。
 
+    //现在我也明白了“赌博游戏”那个案例中，为什么横竖屏可以有不同的布局了。
+    //其实也很简单，就是在横竖屏，不同的情况下，分别进行缩放、布局的调整，如此而已。
 
 
   </script>

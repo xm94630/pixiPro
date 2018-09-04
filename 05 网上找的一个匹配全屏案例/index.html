@@ -25,7 +25,7 @@
 
     <script>
       var GAME_WIDTH = 2000; 
-      var GAME_HEIGHT = 500;
+      var GAME_HEIGHT = 1500;
       var app;
       var stage;
       var background;
@@ -62,10 +62,13 @@
 
       function resize() {
         ratio = Math.min(window.innerWidth/GAME_WIDTH,window.innerHeight/GAME_HEIGHT);
+
+        //核心1 这个才是内部元素缩放的重要原因！！ 
         stage.scale.x = stage.scale.y = ratio;
+        
         app.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
         
-        //核心 之前少了这个坑了我很久
+        //核心2 之前少了这个坑了我很久
         app.render(stage);
       }
 
@@ -74,6 +77,7 @@
 
       //不过它和我之前的案例做的有一个有点：就是一开始加载的时候，新建的画布比例就是对的
       //而我的会闪现下，有调整的行为。见案例4
+      //还有一个是内部元素跟着缩放的优点（就是上边的标注的核心1）
 
 
 
