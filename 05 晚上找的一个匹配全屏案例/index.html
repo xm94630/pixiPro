@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <!-- Viewport meta tag is critical to have mobile browsers
+         actually report correct screen dimensions -->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no" />
+
+    <title>Scaling Demo</title>
+    <style>
+      body {
+        margin: 0; padding: 0;
+        overflow: hidden;
+        background-color: #ff00ff;
+      }
+
+      canvas { background-color: #222222; }
+    </style>
+  </head>
+
+  <body onload="preload();">
+    <script src="pixi.min.js"></script>
+
+    <script>
+      var GAME_WIDTH = 800; 
+      var GAME_HEIGHT = 200;
+      var renderer;
+      var stage;
+      var background;
+      var foreground;
+
+
+      function preload() {
+        createrenderer();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+        var loader = PIXI.loader;
+        loader.add("background", "background.png");
+        loader.once('complete', init);
+        loader.load();
+      }
+
+
+      function createrenderer() {
+        renderer = PIXI.autoDetectRenderer(GAME_WIDTH, GAME_HEIGHT,{
+          antialiasing: false,
+          transparent: false,
+          resolution: window.devicePixelRatio,
+          autoResize: true,
+        });
+        stage = new PIXI.Container();
+        resize();
+        document.body.appendChild(renderer.view);
+        window.addEventListener("resize", resize);
+      }
+
+
+      function init() {
+        background =new PIXI.extras.TilingSprite(PIXI.loader.resources.background.texture,GAME_WIDTH, GAME_HEIGHT);
+        stage.addChild(background);
+        renderer.render(stage);
+      }
+
+      function resize() {
+        ratio = Math.min(window.innerWidth/GAME_WIDTH,window.innerHeight/GAME_HEIGHT);
+        stage.scale.x = stage.scale.y = ratio;
+        renderer.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
+        //核心
+        renderer.render(stage);
+      }
+
+      //该案例是参照网上的案例做的
+      //但是也存在兼容问题，只有在safari中才是好的。
+
+      //不过它和我之前的案例做的有一个有点：就是一开始加载的时候，新建的画布比例就是对的
+      //而我的会闪现下，有调整的行为。见案例4
+
+
+
+    </script>
+  </body>
+</html>
