@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <!-- Viewport meta tag is critical to have mobile browsers
+         actually report correct screen dimensions -->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no" />
+
+    <title>Scaling Demo</title>
+    <style>
+      body {
+        margin: 0; padding: 0;
+        overflow: hidden;
+        background-color: #ff00ff;
+      }
+
+      canvas { background-color: #222222; }
+    </style>
+  </head>
+
+  <body>
+    <script src="pixi.min.js"></script>
+
+    <script>
+      var GAME_WIDTH = 2000; 
+      var GAME_HEIGHT = 1500;
+      var app;
+      var stage;
+      var background;
+      var foreground;
+
+
+      //new PIXI.Application 这个同 PIXI.autoDetectRenderer 应该是版本不同的缘故
+      app = PIXI.autoDetectRenderer({
+        GAME_WIDTH,
+        GAME_HEIGHT,
+        antialiasing: false,
+        transparent: false,
+        resolution: window.devicePixelRatio,
+        autoResize: true,
+      });
+      stage = new PIXI.Container();
+      resize();
+      document.body.appendChild(app.view);
+      
+
+
+
+      PIXI.loader
+        .add("background", "background.png")
+        .add("bird", "bird.png")
+        .load(setup);
+
+      function setup() {
+        background =new PIXI.Sprite(PIXI.loader.resources.background.texture,GAME_WIDTH, GAME_HEIGHT);
+        bird =new PIXI.Sprite(PIXI.loader.resources.bird.texture,GAME_WIDTH, GAME_HEIGHT);
+        bird.scale.x = bird.scale.y = 13
+        stage.addChild(background);
+        stage.addChild(bird);
+        app.render(stage);
+      }
+
+      window.addEventListener("resize", resize);
+
+      function resize() {
+        ratio = Math.min(window.innerWidth/GAME_WIDTH,window.innerHeight/GAME_HEIGHT);
+        stage.scale.x = stage.scale.y = ratio;        
+        app.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
+        app.render(stage);
+      }
+
+
+
+    </script>
+  </body>
+</html>
