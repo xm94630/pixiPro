@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>6</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
+<meta name="mobile-web-app-capable" content="yes">
+<body>
+
+  <script src="./js/pixi.min.js"></script>
+  <script>
+
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+  
+    var w = 500;
+    var h = 300;
+    var app;
+    var background;
+
+    app = new PIXI.Application({width: w,height: h});
+    document.body.appendChild(app.view);
+    container = new PIXI.Container();
+
+    PIXI.loader
+      .add("background", "background.png")
+      .load(function(){
+        cat = new PIXI.Sprite(PIXI.TextureCache["background"]);
+        app.stage.addChild(cat);
+      });
+
+    //注意 实例化app的时候，new PIXI.Application 和 PIXI.autoDetectRenderer 有些区别
+    //返回对象也有差异，使用方法时：
+    //前者使用 app.stage.addChild(cat); 
+    //后者使用 catStage.addChild(background);app.render(catStage);
+
+    //我查找了原因，大概就是，前者直接生成pixi实例，和一个默认的名为 stage 的场景（其实是一个容器）
+    //stage中还没有内容，可以自己添加sprite
+    //而后者，仅仅生成一个实例，没有容器，通过app.addChild添加容器，并指定渲染该容器（场景）
+
+
+
+
+
+
+
+  </script>
+</body>
+

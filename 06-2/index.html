@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>6-2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
+<meta name="mobile-web-app-capable" content="yes">
+<body>
+
+  <script src="./js/pixi.min.js"></script>
+  <script>
+
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+  
+    var w = 500;
+    var h = 300;
+    var app;
+    var background;
+
+    app = PIXI.autoDetectRenderer({width: w,height: h});
+    document.body.appendChild(app.view);
+    container = new PIXI.Container();
+
+    PIXI.loader
+      .add("background", "background.png")
+      .add("bird", "bird.png")
+      .load(function(){
+        cat = new PIXI.Sprite(PIXI.TextureCache["background"]);
+        bird = new PIXI.Sprite(PIXI.TextureCache["bird"]);
+
+        //PIXI.autoDetectRenderer 返回的实例的方法render是必须指定一个场景赋值给app.stage
+        var myStage = (new PIXI.Container({width:w,height:h})).addChild(cat)
+        app.render(myStage);
+
+        //用下面这个渲染指定的场景（相当于切换场景）
+        //var myStage2 = (new PIXI.Container({width:w,height:h})).addChild(bird)
+        //app.render(myStage2);
+      });
+
+
+
+
+
+
+  </script>
+</body>
+
