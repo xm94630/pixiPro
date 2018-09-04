@@ -20,53 +20,53 @@
     </style>
   </head>
 
-  <body onload="preload();">
+  <body>
     <script src="pixi.min.js"></script>
 
     <script>
       var GAME_WIDTH = 800; 
       var GAME_HEIGHT = 200;
-      var renderer;
+      var app;
       var stage;
       var background;
       var foreground;
 
 
-      function preload() {
-        createrenderer();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-        var loader = PIXI.loader;
-        loader.add("background", "background.png");
-        loader.once('complete', init);
-        loader.load();
-      }
+      //new PIXI.Application 这个同 PIXI.autoDetectRenderer 应该是版本不同的缘故
+      app = PIXI.autoDetectRenderer({
+        GAME_WIDTH,
+        GAME_HEIGHT,
+        antialiasing: false,
+        transparent: false,
+        resolution: window.devicePixelRatio,
+        autoResize: true,
+      });
+      stage = new PIXI.Container();
+      resize();
+      document.body.appendChild(app.view);
+      
 
 
-      function createrenderer() {
-        renderer = PIXI.autoDetectRenderer(GAME_WIDTH, GAME_HEIGHT,{
-          antialiasing: false,
-          transparent: false,
-          resolution: window.devicePixelRatio,
-          autoResize: true,
-        });
-        stage = new PIXI.Container();
-        resize();
-        document.body.appendChild(renderer.view);
-        window.addEventListener("resize", resize);
-      }
 
+      PIXI.loader
+        .add("background", "background.png")
+        .load(setup);
 
-      function init() {
-        background =new PIXI.extras.TilingSprite(PIXI.loader.resources.background.texture,GAME_WIDTH, GAME_HEIGHT);
+      function setup() {
+        background =new PIXI.Sprite(PIXI.loader.resources.background.texture,GAME_WIDTH, GAME_HEIGHT);
         stage.addChild(background);
-        renderer.render(stage);
+        app.render(stage);
       }
+
+      window.addEventListener("resize", resize);
 
       function resize() {
         ratio = Math.min(window.innerWidth/GAME_WIDTH,window.innerHeight/GAME_HEIGHT);
         stage.scale.x = stage.scale.y = ratio;
-        renderer.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
-        //核心
-        renderer.render(stage);
+        app.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
+        
+        //核心 之前少了这个坑了我很久
+        app.render(stage);
       }
 
       //该案例是参照网上的案例做的

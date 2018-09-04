@@ -41,10 +41,11 @@
     app.renderer.view.style.display = "block";
     document.body.appendChild(app.view);
 
+
+
     PIXI.loader
       .add("bird.png")
       .load(setup);
-
 
     function setup() {
       cat = new PIXI.Sprite(PIXI.TextureCache["bird.png"]);
