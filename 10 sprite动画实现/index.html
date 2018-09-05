@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>10</title>
+    <style>
+      body {
+        margin: 0; padding: 0;
+        overflow: hidden;
+        background-color: #ff00ff;
+      }
+      canvas { background-color: #222222; }
+    </style>
+  </head>
+
+  <body onload="preload();">
+    <script src="pixi.min.js"></script>
+
+    <script>
+      var GAME_WIDTH = 1200; 
+      var GAME_HEIGHT = 600;
+      
+      var renderer;
+      var stage;
+
+      var background;
+      var BG_RATE = 50; //背景的速度
+
+      var monster;
+
+      //注意，知道这几个名字如何来的吗?其实是在json文件中定义好的！
+      //这里单独又拿出来纯粹是为了引用方便
+      var FRAMES = [
+        "frame-1.png",
+        "frame-2.png",
+        "frame-3.png",
+        "frame-4.png",
+      ];
+      var frameindex;
+      var frametime;
+      var FRAMERATE = 0.08; //鸟的帧频
+      var VELOCITY  = 100;  //鸟的速度
+
+      var lasttime;
+
+
+      function preload() {
+        createrenderer(); 
+        
+        var loader = PIXI.loader;
+
+        //注意，对于小鸟图片的加载，这里的处理手法很不一样
+        //它加载的是一个json文件，这个文件中说明了需要加载的图片，以及如何切分帧的处理
+        //所以最后在引用它的时候，使用的是json中定义好的名字
+        loader.add("monster", "monster.json");
+        loader.add("background", "background.png");
+      
+        loader.once('complete', init);
+        loader.load();
+      }
+
+
+      function createrenderer() {
+        
+        renderer = PIXI.autoDetectRenderer(GAME_WIDTH, GAME_HEIGHT);
+        stage = new PIXI.Container();
+        resize();
+        document.body.appendChild(renderer.view);
+        window.addEventListener("resize", resize);
+      }
+
+
+      function init() {
+
+        //背景
+        background =new PIXI.extras.TilingSprite(PIXI.loader.resources.background.texture);
+        background.width=GAME_WIDTH;
+        background.height=GAME_HEIGHT;
+        
+        stage.addChild(background);
+        
+        //鸟
+        monster = new PIXI.Sprite(PIXI.Texture.fromFrame("frame-1.png"));
+        frameindex = 0;
+        frametime = FRAMERATE;
+        monster.anchor.x = 0,5;
+        monster.anchor.y = 0.5;
+        monster.position.x = -monster.width/2;
+        monster.position.y = GAME_HEIGHT/2 - monster.height/2;
+        stage.addChild(monster);
+        
+        //起始帧的时间
+        lasttime = new Date().getTime();
+        
+        //这个是非常核心的函数，控制帧频，定时进行回调函数的执行
+        requestAnimationFrame(animate);
+
+      }
+
+      function resize() {
+        ratio = Math.min(window.innerWidth/GAME_WIDTH,window.innerHeight/GAME_HEIGHT);
+        stage.scale.x = stage.scale.y = ratio;
+        renderer.resize(Math.ceil(GAME_WIDTH * ratio),Math.ceil(GAME_HEIGHT * ratio));
+      }
+
+      function animate() {
+
+        //这里获取的其实是整个动画的帧频
+        //因为这个animate其实是被定时调用的（如用setTimeInterver），这里获取的就是那个帧和帧之间的时间间隔t1
+        //这个间隔可能就是setTimeInterver设置的时间t0，
+        //不过这个t1可能会大于t0;在 setTimeInterver 处理回调比较耗时的时候
+        //用这个时间来计算背景移动的时间比较合适，不会产生卡顿
+        //为什么呢，如果处理回调的时候发生了阻塞，实际时间超过了定时器时间，那么t1就会很大，用它来计算移动距离也会增加
+        //假如使用的是固定的时间t2，那么，回调被卡顿了，结果动画移动的距离还是一点点，画面上就显得很卡了
+        //所以这个处理很关键，也很精彩
+        var currtime = new Date().getTime();
+        var delta = (currtime-lasttime)/1000;
+        
+        //背景滚动
+        //TilingSprite实例的一个属性tilePosition，指定x,y上滚动的速度
+        background.tilePosition.x += BG_RATE*delta; //速度*时间
+        background.tilePosition.y -= BG_RATE*delta; //速度*时间
+
+        //小鸟移动
+        monster.position.x += VELOCITY*delta; //速度*时间
+        //超出屏幕之后回到屏幕左侧
+        if (monster.position.x > GAME_WIDTH + monster.width/2) {
+          monster.position.x = -monster.width/2;
+        }
+
+        //小鸟本身的动画实现
+        //这里的思路是怎么样的呢：其实也很简单
+        //首先，动画的帧频是一定要高于小鸟动画的
+        //这里每次在小鸟帧频的时间中减去动画帧频，是在等待切换小鸟的帧
+        //frametime是个全局变量，在动画帧频一点点过去时间时候， frametime 总会被减完，然后说明到了该切换帧了
+        //一旦切换完一个帧之后，frametime又恢复成小鸟的帧频。
+        //当4个帧切完之后，再从头一帧开始，周而复始
+        
+        //这里我觉得 Sprite 对动画的处理还是低级了些
+        //居然需要自己手动来处理，虽然灵活性高点，但是效率很低下
+        //作者应该封装一个类似“movieClip”这种概念
+
+        frametime = frametime - delta;
+        if (frametime <= 0) {
+          frameindex++;
+          if (frameindex >= FRAMES.length) {
+            frameindex = 0;
+          }
+          monster.texture = PIXI.Texture.fromFrame(FRAMES[frameindex]);
+          frametime = FRAMERATE;
+        }
+
+        //渲染场景
+        renderer.render(stage);
+        //继续下一帧
+        requestAnimationFrame(animate);
+        //时间重置
+        lasttime = currtime;
+      }
+    </script>
+  </body>
+</html>

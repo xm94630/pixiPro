@@ -1,0 +1,42 @@
+{
+	"frames": {
+	"frame-1.png":
+	{
+		"frame": {"x":2,"y":2,"w":113,"h":87},
+		"rotated": false,
+		"trimmed": false,
+		"spriteSourceSize": {"x":0,"y":0,"w":113,"h":87},
+		"sourceSize": {"w":113,"h":87},
+		"pivot": {"x":0.5,"y":0.5}
+	},
+	"frame-2.png":
+	{
+		"frame": {"x":117,"y":2,"w":113,"h":87},
+		"rotated": false,
+		"trimmed": false,
+		"spriteSourceSize": {"x":0,"y":0,"w":113,"h":87},
+		"sourceSize": {"w":113,"h":87},
+		"pivot": {"x":0.5,"y":0.5}
+	},
+	"frame-3.png":
+	{
+		"frame": {"x":232,"y":2,"w":113,"h":87},
+		"rotated": false,
+		"trimmed": false,
+		"spriteSourceSize": {"x":0,"y":0,"w":113,"h":87},
+		"sourceSize": {"w":113,"h":87},
+		"pivot": {"x":0.5,"y":0.5}
+	},
+	"frame-4.png":
+	{
+		"frame": {"x":347,"y":2,"w":113,"h":87},
+		"rotated": false,
+		"trimmed": false,
+		"spriteSourceSize": {"x":0,"y":0,"w":113,"h":87},
+		"sourceSize": {"w":113,"h":87},
+		"pivot": {"x":0.5,"y":0.5}
+	}},
+	"meta": {
+		"image": "monster.png"
+	}
+}
