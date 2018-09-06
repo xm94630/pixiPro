@@ -16,7 +16,7 @@
   <script src="./js/pixi.min.js"></script>
   <script>
 
-    //PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
   
     var w = 600;
     var h = 900;
@@ -35,25 +35,19 @@
     document.body.appendChild(app.view);
 
     //创建容器（场景）
-    container = new PIXI.Container();
-    //缩放
-    resize();
+    var indexContainer  = new PIXI.Container();
+    var gameContainer   = new PIXI.Container();
+    var authorContainer = new PIXI.Container();
 
-    //资源加载
-    PIXI.loader
-      .add("background", "background.png")
-      .load(setup);
-
-    //加载后回调
-    function setup() {
-
+    //场景1绘制
+    function stage1(){
         //创建背景图片
         background =new PIXI.Sprite(PIXI.loader.resources.background.texture);
         background.height = h;
         
-        //创建文字
+        //创建标题文字
         var title = new PIXI.Text('新交大群侠传',{
-          fontSize: 50,
+          fontSize: 60,
           fill: 0x000,
           align: 'left'
         });
@@ -65,10 +59,107 @@
         title.x = w/2;
         title.y = 200;
 
+        //按钮文字1
+        var btn1 = new PIXI.Text('开始游戏',{
+          fontSize: 40
+        });
+        btn1.anchor.set(.5)
+        btn1.x = w/2;
+        btn1.y = 600;
+        btn1.interactive = true;
+        btn1.buttonMode = true;
+        btn1.on('tap', function(){
+          app.stage = gameContainer;
+        });
+        
+        //按钮文字2
+        var btn2 = new PIXI.Text('作者介绍',{
+          fontSize: 40
+        });
+        btn2.anchor.set(.5)
+        btn2.x = w/2;
+        btn2.y = 700;
+        btn2.interactive = true;
+        btn2.buttonMode = true;
+        btn2.on('tap', function(){
+          app.stage = authorContainer;
+        });
 
-        container.addChild(background);
-        container.addChild(title);
-        app.stage.addChild(container);
+        indexContainer.addChild(background);
+        indexContainer.addChild(title);
+        indexContainer.addChild(btn1);
+        indexContainer.addChild(btn2);
+    }
+
+    //场景2绘制
+    function stage2(){   
+        var btn = new PIXI.Text('游戏开始',{
+          fontSize: 60,
+          fill: 0x000,
+          align: 'left'
+        });
+        btn.anchor.set(.5)
+        btn.x = w/2;
+        btn.y = 200;
+        btn.interactive = true;
+        btn.buttonMode = true;
+        gameContainer.addChild(btn);
+    }
+
+    //场景3绘制
+    function stage3(){
+
+      // 如果加上下面这些，stage3被多次调用有重置场景的效果。看情况使用
+      // authorContainer = new PIXI.Container();
+      // resize();
+      
+      var btn = new PIXI.Text('作者是一个画家',{
+        fontSize: 60,
+        fill: 0x000,
+        align: 'left'
+      });
+      btn.anchor.set(.5)
+      btn.x = w/2;
+      btn.y = 200;
+      btn.interactive = true;
+      btn.buttonMode = true;
+
+      var btn2 = new PIXI.Text('返回首页',{
+        fontSize: 40,
+        fill: 0x000,
+        align: 'left'
+      });
+      btn2.anchor.set(.5)
+      btn2.x = w/2;
+      btn2.y = 400;
+      btn2.interactive = true;
+      btn2.buttonMode = true;
+      btn2.on('tap', function(){
+        app.stage = indexContainer;
+      });
+      authorContainer.addChild(btn);
+      authorContainer.addChild(btn2);
+    }
+
+    //缩放
+    resize();
+
+    //资源加载
+    PIXI.loader
+      .add("background", "background.png")
+      .load(setup);
+
+    //加载后回调
+    function setup() {
+
+      //完成3个场景的设置
+      stage1();
+      stage2();
+      stage3();
+      
+      //这两个都可以用
+      //app.stage.addChild(indexContainer);
+      app.stage = indexContainer;
     }
 
     window.addEventListener('resize', resize);
@@ -76,8 +167,11 @@
     function resize(){
       //缩放
       ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
-      container.scale.x = container.scale.y = ratio;
       app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));      
+      //所有的场景也要缩放
+      indexContainer.scale.x = indexContainer.scale.y = ratio;
+      gameContainer.scale.x = gameContainer.scale.y = ratio;
+      authorContainer.scale.x = authorContainer.scale.y = ratio;
       //居中
       var ratio2 = w/h;
       if(window.innerWidth/window.innerHeight>w/h){
