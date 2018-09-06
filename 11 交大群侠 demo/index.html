@@ -18,8 +18,8 @@
 
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
   
-    var w = 600;
-    var h = 900;
+    var w = 375;//这个是iphone6-x 的宽度
+    var h = 600;
     var background;
     var app;
 
@@ -47,25 +47,27 @@
         
         //创建标题文字
         var title = new PIXI.Text('新交大群侠传',{
-          fontSize: 60,
-          fill: 0x000,
-          align: 'left'
+          font: 'bold italic 50px Arial',
+          fill: '#ffffff',
+          stroke: '#000000',
+          strokeThickness: 2
         });
+        title.resolution = 2;
         title.anchor.set(.5)
         //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
         //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
         //或者把 resize(); 放在这里之后。
         //title.x = app.screen.width/2;
         title.x = w/2;
-        title.y = 200;
+        title.y = 100;
 
         //按钮文字1
         var btn1 = new PIXI.Text('开始游戏',{
-          fontSize: 40
+          fontSize: 30
         });
         btn1.anchor.set(.5)
         btn1.x = w/2;
-        btn1.y = 600;
+        btn1.y = 300;
         btn1.interactive = true;
         btn1.buttonMode = true;
         btn1.on('tap', function(){
@@ -74,11 +76,11 @@
         
         //按钮文字2
         var btn2 = new PIXI.Text('作者介绍',{
-          fontSize: 40
+          fontSize: 30
         });
         btn2.anchor.set(.5)
         btn2.x = w/2;
-        btn2.y = 700;
+        btn2.y = 400;
         btn2.interactive = true;
         btn2.buttonMode = true;
         btn2.on('tap', function(){
@@ -94,7 +96,7 @@
     //场景2绘制
     function stage2(){   
         var btn = new PIXI.Text('游戏开始',{
-          fontSize: 60,
+          fontSize: 30,
           fill: 0x000,
           align: 'left'
         });
@@ -114,7 +116,7 @@
       // resize();
       
       var btn = new PIXI.Text('作者是一个画家',{
-        fontSize: 60,
+        fontSize: 30,
         fill: 0x000,
         align: 'left'
       });
@@ -125,7 +127,7 @@
       btn.buttonMode = true;
 
       var btn2 = new PIXI.Text('返回首页',{
-        fontSize: 40,
+        fontSize: 30,
         fill: 0x000,
         align: 'left'
       });
