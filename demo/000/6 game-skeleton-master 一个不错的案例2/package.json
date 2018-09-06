@@ -2,7 +2,7 @@
   "name": "game-skeleton",
   "version": "0.0.1",
   "description": "A basic skeleton for new games including menu, state, object oriented javascript objects, pixi renderer and much more.",
-  "author": "Mathieu de Ruiter",
+  "author": "Mathieu de Ruiter2222",
   "contributors": [],
   "main": "./src/game.js",
   "homepage": "http://www.couchfriends.com/",

@@ -97,7 +97,7 @@ Game.Menu = {
         credits.activate = function () {
             Game.Button.prototype.activate.call(this);
             Game.Menu.windowSettings.hide();
-            Game.Menu.window.show('Credits\n\nMathieu de Ruiter\nwww.couchfriends.com');
+            Game.Menu.window.show('Credits3333\n\nM999999999999999999999999999999999athieu de Ruiter\nwww.couchfriends.com');
         };
         credits.add();
 

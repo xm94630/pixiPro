@@ -47,10 +47,20 @@
         
         //创建标题文字
         var title = new PIXI.Text('新交大群侠传',{
-          font: 'bold italic 50px Arial',
-          fill: '#ffffff',
-          stroke: '#000000',
-          strokeThickness: 2
+          fontFamily: 'Arial',
+          fontSize: 50,
+          fontStyle: 'italic',
+          fontWeight: 'bold',
+          fill: ['#ffffff', '#00ff99'], // gradient
+          stroke: '#4a1850',
+          strokeThickness: 5,
+          dropShadow: true,
+          dropShadowColor: '#000000',
+          dropShadowBlur: 4,
+          dropShadowAngle: Math.PI / 6,
+          dropShadowDistance: 6,
+          wordWrap: true,
+          wordWrapWidth: 440
         });
         title.resolution = 2;
         title.anchor.set(.5)
@@ -115,10 +125,10 @@
       // authorContainer = new PIXI.Container();
       // resize();
       
-      var btn = new PIXI.Text('作者是一个画家',{
-        fontSize: 30,
-        fill: 0x000,
-        align: 'left'
+      var btn = new PIXI.Text('作者是一个画家，如果这里文字很长很长很长，我需要会折行的文字',{
+        "breakWords": true,
+        "wordWrapWidth": w,
+        "wordWrap": true
       });
       btn.anchor.set(.5)
       btn.x = w/2;

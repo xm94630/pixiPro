@@ -212,7 +212,7 @@ function titleSetup(){
   uiContainer.visible = false;
   titleContainer.visible = true; 
 
-  let titleText = new PIXI.Text("xuming", {fontFamily:"Conv_monogram", fontSize:184, fill:"white"})
+  let titleText = new PIXI.Text("xuming22222222222222222222222222", {fontFamily:"Conv_monogram", fontSize:184, fill:"white"})
   titleText.anchor.set(0.5,0.5);
   titleText.position.set(360,200);
   titleContainer.addChild(titleText);
