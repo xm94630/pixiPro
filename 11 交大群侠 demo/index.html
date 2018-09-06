@@ -1,0 +1,95 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>交大</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0">
+<!-- 这meta的作用就是删除默认的苹果工具栏和菜单栏 -->
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  body {
+    margin: 0; padding: 0;
+    overflow: hidden;
+    background-color: #000;
+  }
+</style>
+<body>
+
+  <script src="./js/pixi.min.js"></script>
+  <script>
+
+    //PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+  
+    var w = 600;
+    var h = 900;
+    var background;
+    var app;
+
+    //创建实例
+    app = new PIXI.Application({ 
+        width: w, 
+        height: h,                       
+        backgroundColor:0xffffff  
+      }
+    );
+    app.view.style.position = "absolute"
+    app.view.style.display = "block";
+    document.body.appendChild(app.view);
+
+    //创建容器（场景）
+    container = new PIXI.Container();
+    //缩放
+    resize();
+
+    //资源加载
+    PIXI.loader
+      .add("background", "background.png")
+      .load(setup);
+
+    //加载后回调
+    function setup() {
+
+        //创建背景图片
+        background =new PIXI.Sprite(PIXI.loader.resources.background.texture);
+        background.height = h;
+        
+        //创建文字
+        var title = new PIXI.Text('新交大群侠传',{
+          fontSize: 50,
+          fill: 0x000,
+          align: 'left'
+        });
+        title.anchor.set(.5)
+        //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
+        //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
+        //或者把 resize(); 放在这里之后。
+        //title.x = app.screen.width/2;
+        title.x = w/2;
+        title.y = 200;
+
+
+        container.addChild(background);
+        container.addChild(title);
+        app.stage.addChild(container);
+    }
+
+    window.addEventListener('resize', resize);
+
+    function resize(){
+      //缩放
+      ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
+      container.scale.x = container.scale.y = ratio;
+      app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));      
+      //居中
+      var ratio2 = w/h;
+      if(window.innerWidth/window.innerHeight>w/h){
+        app.view.style.top = 0
+        app.view.style.left = (window.innerWidth-window.innerHeight*ratio2)/2+'px'
+      }else{
+        app.view.style.left = 0
+        app.view.style.top = (window.innerHeight-window.innerWidth/ratio2)/2+'px'
+      }
+
+    }
+
+  </script>
+</body>
+
