@@ -126,6 +126,8 @@
       // resize();
       
       var btn = new PIXI.Text('作者是一个画家，如果这里文字很长很长很长，我需要会折行的文字',{
+        //下面三行是实现文字折行的重要配置
+        //谷歌搜索 pixi text 查得 => https://pixijs.io/pixi-text-style/#
         "breakWords": true,
         "wordWrapWidth": w,
         "wordWrap": true
