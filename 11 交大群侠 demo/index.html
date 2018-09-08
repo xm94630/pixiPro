@@ -10,6 +10,13 @@
     overflow: hidden;
     background-color: #000;
   }
+  @font-face {
+    font-family: 'Conv_monogram';
+    src: url('fonts/monogram.eot');
+    src: local('☺'), url('fonts/monogram.woff') format('woff'), url('fonts/monogram.ttf') format('truetype'), url('fonts/monogram.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
 </style>
 <body>
 
@@ -18,8 +25,11 @@
 
     PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
   
-    var w = 375;//这个是iphone6-x 的宽度
-    var h = 600;
+    //var w = 375;//这个是iphone6-x 的宽度
+    //var h = 600;
+
+    var w = 750;
+    var h = 1200;
     var background;
     var app;
 
@@ -48,7 +58,7 @@
         //创建标题文字
         var title = new PIXI.Text('新交大群侠传',{
           fontFamily: 'Arial',
-          fontSize: 50,
+          fontSize: 100,
           fontStyle: 'italic',
           fontWeight: 'bold',
           fill: ['#ffffff', '#00ff99'], // gradient
@@ -72,8 +82,9 @@
         title.y = 100;
 
         //按钮文字1
-        var btn1 = new PIXI.Text('开始游戏',{
-          fontSize: 30
+        var btn1 = new PIXI.Text('GAME start',{
+          fontFamily:"Conv_monogram",
+          fontSize: 120
         });
         btn1.anchor.set(.5)
         btn1.x = w/2;
@@ -85,8 +96,8 @@
         });
         
         //按钮文字2
-        var btn2 = new PIXI.Text('作者介绍',{
-          fontSize: 30
+        var btn2 = new PIXI.Text('Author 介绍',{
+          fontSize: 60
         });
         btn2.anchor.set(.5)
         btn2.x = w/2;
@@ -108,7 +119,7 @@
     //场景2绘制
     function stage2(){   
         var btn = new PIXI.Text('游戏开始',{
-          fontSize: 30,
+          fontSize: 60,
           fill: 0x000,
           align: 'left'
         });
@@ -141,7 +152,7 @@
       btn.buttonMode = true;
 
       var btn2 = new PIXI.Text('返回首页',{
-        fontSize: 30,
+        fontSize: 60,
         fill: 0x000,
         align: 'left'
       });
@@ -182,9 +193,9 @@
       app.ticker.add(function(delta) {
         //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
         //indexContainer.children[1].x += delta/10;
-        //indexContainer.getChildAt(1).x += delta/10;
+        //indexContainer.getChildAt(2).x += delta/10;
       });
-      
+
     }
 
     window.addEventListener('resize', resize);
