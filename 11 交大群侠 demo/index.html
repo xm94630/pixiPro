@@ -97,10 +97,12 @@
           app.stage = authorContainer;
         });
 
-        indexContainer.addChild(background);
-        indexContainer.addChild(title);
-        indexContainer.addChild(btn1);
-        indexContainer.addChild(btn2);
+        //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
+        indexContainer.addChild(background,title,btn1,btn2);
+        // indexContainer.addChildAt(background,0)
+        // indexContainer.addChildAt(title,1)
+        // indexContainer.addChildAt(btn1,2)
+        // indexContainer.addChildAt(btn2,3)
     }
 
     //场景2绘制
@@ -174,6 +176,15 @@
       //这两个都可以用
       //app.stage.addChild(indexContainer);
       app.stage = indexContainer;
+      console.log(indexContainer)
+
+
+      app.ticker.add(function(delta) {
+        //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
+        //indexContainer.children[1].x += delta/10;
+        //indexContainer.getChildAt(1).x += delta/10;
+      });
+      
     }
 
     window.addEventListener('resize', resize);
@@ -181,7 +192,7 @@
     function resize(){
       //缩放
       ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
-      app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));      
+      app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
       //所有的场景也要缩放
       indexContainer.scale.x = indexContainer.scale.y = ratio;
       gameContainer.scale.x = gameContainer.scale.y = ratio;
