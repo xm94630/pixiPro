@@ -43,6 +43,13 @@
   var w = 750;
   var h = 1200;
 
+  //这个是很重要的一个函数，用于 app.ticker 之中。
+  //当 myTicker 赋予不同的处理函数的时候，就会对对应的函数处理
+  //而不被处理的内容，状态就不会被改变，就好像被“暂停了”一样
+  //所以所谓的“暂停”，无非就是某个场景的状态不被改变而已。
+  //我之前在研究“faerieFM”的暂停的时候，一直找不到“暂停”的操作，后来一一排查，才恍然大悟！
+  var myTicker = function(){}
+
   //创建实例
   var app = new PIXI.Application({width:w,height: h,backgroundColor:0xffffff});
   app.view.style.position = "absolute";
@@ -57,9 +64,9 @@
     app.view.style.height = Math.ceil(h * ratio) + "px";
     //app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
     //所有的场景也要缩放
-    //indexContainer.scale.x = indexContainer.scale.y = ratio;
-    //gameContainer.scale.x = gameContainer.scale.y = ratio;
-    //authorContainer.scale.x = authorContainer.scale.y = ratio;
+    //stage1.scale.x = stage1.scale.y = ratio;
+    //stage2.scale.x = stage2.scale.y = ratio;
+    //stage3.scale.x = stage3.scale.y = ratio;
     
     //居中
     var ratio2 = w/h;
@@ -73,21 +80,33 @@
   }
   resize();
   PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
+  app.ticker.add(function(delta) {
+    myTicker(delta);
+  });
 
   //创建容器（场景）
-  var background      = new PIXI.Container();
-  var indexContainer  = new PIXI.Container();
-  var gameContainer   = new PIXI.Container();
-  var authorContainer = new PIXI.Container();
+  var background = new PIXI.Container();
+  var stage1     = new PIXI.Container();
+  var stage2     = new PIXI.Container();
+  var stage3     = new PIXI.Container();
 
+  //各个场景中的状态改变器：
+  function stage1_ticker(delta){
+      //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
+      stage1.children[1].x += delta/10;
+      //stage1.getChildAt(2).x += delta/10;
+  }
+  function stage2_ticker(){}
+  function stage3_ticker(){}
+
+  
   //场景1绘制
-  function stage1(){
+  function stage1_layout(){
       //创建背景图片
       bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
       bk.height = h;
       background.addChild(bk);
 
-      
       //创建标题文字
       var title = new PIXI.Text('新交大群侠传',{
         fontFamily: 'Arial',
@@ -127,7 +146,7 @@
       btn1.interactive = true;
       btn1.buttonMode = true;
       btn1.on('tap', function(){
-        app.stage = gameContainer;
+        app.stage = stage2;
       });
       
       //按钮文字2
@@ -140,19 +159,19 @@
       btn2.interactive = true;
       btn2.buttonMode = true;
       btn2.on('tap', function(){
-        app.stage = authorContainer;
+        app.stage = stage3;
       });
 
       //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
-      indexContainer.addChild(background,title,btn1,btn2);
-      // indexContainer.addChildAt(background,0)
-      // indexContainer.addChildAt(title,1)
-      // indexContainer.addChildAt(btn1,2)
-      // indexContainer.addChildAt(btn2,3)
+      stage1.addChild(background,title,btn1,btn2);
+      // stage1.addChildAt(background,0)
+      // stage1.addChildAt(title,1)
+      // stage1.addChildAt(btn1,2)
+      // stage1.addChildAt(btn2,3)
   }
 
   //场景2绘制
-  function stage2(){   
+  function stage2_layout(){   
       var btn = new PIXI.Text('游戏开始',{
         fontSize: 60,
         fill: 0x000,
@@ -163,14 +182,14 @@
       btn.y = 200;
       btn.interactive = true;
       btn.buttonMode = true;
-      gameContainer.addChild(btn);
+      stage2.addChild(btn);
   }
 
   //场景3绘制
-  function stage3(){
+  function stage3_layout(){
 
     // 如果加上下面这些，stage3被多次调用有重置场景的效果。看情况使用
-    // authorContainer = new PIXI.Container();
+    // stage3 = new PIXI.Container();
     // resize();
     
     var btn = new PIXI.Text('作者是一个画家，如果这里文字很长很长很长，我需要会折行的文字',{
@@ -197,10 +216,10 @@
     btn2.interactive = true;
     btn2.buttonMode = true;
     btn2.on('tap', function(){
-      app.stage = indexContainer;
+      app.stage = stage1;
     });
-    authorContainer.addChild(btn);
-    authorContainer.addChild(btn2);
+    stage3.addChild(btn);
+    stage3.addChild(btn2);
   }
 
 
@@ -213,20 +232,18 @@
   //加载后回调
   function setup() {
 
-    //完成3个场景的设置
-    stage1();
-    stage2();
-    stage3();
+    //完成3个容器进行布局
+    stage1_layout();
+    stage2_layout();
+    stage3_layout();
     
-    //这两个都可以用
-    //app.stage.addChild(indexContainer);
-    app.stage = indexContainer;
+    //把容器1进行展示
+    //app.stage.addChild(stage1);
+    app.stage = stage1;
+    //使用容器1对应的“状态改变器”
+    myTicker = stage1_ticker;
+    
 
-    app.ticker.add(function(delta) {
-      //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
-      //indexContainer.children[1].x += delta/10;
-      //indexContainer.getChildAt(2).x += delta/10;
-    });
 
   }
 
@@ -235,10 +252,10 @@
   //注意点：
   //1 就是字体显示模糊的问题，已经解决。坑了我很久
   //2 就是场景控制问题，
-  //1)比如只有一个场景，其他的内容都用容器的显示和隐藏来解决
-  //2)比如有多个场景，可以通过切换场景来进行
-  //3)那些内容是需要复位的，而那些是可以单独运行的，而时间计时器是如何在各个场景中运行的，这些都要搞明白
-
+  //  1)比如只有一个场景，其他的内容都用容器的显示和隐藏来解决
+  //  2)比如有多个场景，可以通过切换场景来进行
+  //  3)那些内容是需要复位的，而那些是可以单独运行的，而时间计时器是如何在各个场景中运行的，这些都要搞明白
+  //3 理解app.ticker.add，清空其回调，就是暂停。之前因为理解不够透彻，被坑了很久！
   
 
 </script>
