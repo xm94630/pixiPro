@@ -220,11 +220,17 @@
     function resize(){
       //缩放
       ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
-      app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
+      
+      //这个是解决缩放后文字变模糊的核心所在，之前的用法是错误的！
+      app.view.style.width = Math.ceil(w * ratio) + "px";
+      app.view.style.height = Math.ceil(h * ratio) + "px";
+      
+      //app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
       //所有的场景也要缩放
-      indexContainer.scale.x = indexContainer.scale.y = ratio;
-      gameContainer.scale.x = gameContainer.scale.y = ratio;
-      authorContainer.scale.x = authorContainer.scale.y = ratio;
+      //indexContainer.scale.x = indexContainer.scale.y = ratio;
+      //gameContainer.scale.x = gameContainer.scale.y = ratio;
+      //authorContainer.scale.x = authorContainer.scale.y = ratio;
+      
       //居中
       var ratio2 = w/h;
       if(window.innerWidth/window.innerHeight>w/h){
