@@ -409,8 +409,9 @@ removePlayer();
 }
 
 function pause(){
-pauseContainer.visible = true;
-currentSong.pause();
+  console.log(123)
+  pauseContainer.visible = true;
+  currentSong.pause();
 }
 
 function play(){

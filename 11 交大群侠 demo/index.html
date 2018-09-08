@@ -25,153 +25,114 @@
     font-style: normal;
   }
 </style>
-<body>
-  <script src="./js/webfontloader.js"></script>
-  <script>
-    WebFont.load({
-      custom: {
-        families: ['Conv_monogram','Conv_Minecraftia-Regular']
-      }
-    });
-  </script>
-  <script src="./js/pixi.min.js"></script>
-  <script>
-
-    PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
-  
-    //var w = 375;//这个是iphone6-x 的宽度
-    //var h = 600;
-
-    var w = 750;
-    var h = 1200;
-    var background;
-    var app;
-
-    //创建实例
-    app = new PIXI.Application({ 
-        width: w, 
-        height: h,                       
-        backgroundColor:0xffffff  
-      }
-    );
-    app.view.style.position = "absolute"
-    app.view.style.display = "block";
-    document.body.appendChild(app.view);
-
-    //创建容器（场景）
-    var indexContainer  = new PIXI.Container();
-    indexContainer.scale.x = indexContainer.scale.y = 1;
-    var gameContainer   = new PIXI.Container();
-    var authorContainer = new PIXI.Container();
-
-    //场景1绘制
-    function stage1(){
-        //创建背景图片
-        background =new PIXI.Sprite(PIXI.loader.resources.background.texture);
-        background.height = h;
-        
-        //创建标题文字
-        var title = new PIXI.Text('新交大群侠传',{
-          fontFamily: 'Arial',
-          fontSize: 100,
-          fontStyle: 'italic',
-          fontWeight: 'bold',
-          fill: ['#ffffff', '#00ff99'], // gradient
-          stroke: '#4a1850',
-          strokeThickness: 5,
-          dropShadow: true,
-          dropShadowColor: '#000000',
-          dropShadowBlur: 4,
-          dropShadowAngle: Math.PI / 6,
-          dropShadowDistance: 6,
-          wordWrap: true,
-          wordWrapWidth: 440
-        });
-        title.resolution = 2;
-        title.anchor.set(.5)
-        //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
-        //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
-        //或者把 resize(); 放在这里之后。
-        //title.x = app.screen.width/2;
-        title.x = w/2;
-        title.y = 100;
-
-        //按钮文字1
-        var btn1 = new PIXI.Text('GAME Start',{
-          //fontFamily:"Conv_monogram",
-          fontFamily:"Conv_Minecraftia-Regular",
-          fontSize:32, 
-          padding:20
-        });
-        btn1.anchor.set(.5)
-        btn1.x = w/2;
-        btn1.y = 300;
-        btn1.interactive = true;
-        btn1.buttonMode = true;
-        btn1.on('tap', function(){
-          app.stage = gameContainer;
-        });
-        
-        //按钮文字2
-        var btn2 = new PIXI.Text('Author 介绍',{
-          fontSize: 60
-        });
-        btn2.anchor.set(.5)
-        btn2.x = w/2;
-        btn2.y = 400;
-        btn2.interactive = true;
-        btn2.buttonMode = true;
-        btn2.on('tap', function(){
-          app.stage = authorContainer;
-        });
-
-        //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
-        indexContainer.addChild(background,title,btn1,btn2);
-        // indexContainer.addChildAt(background,0)
-        // indexContainer.addChildAt(title,1)
-        // indexContainer.addChildAt(btn1,2)
-        // indexContainer.addChildAt(btn2,3)
+<script src="./js/webfontloader.js"></script>
+<script>
+  WebFont.load({
+    custom: {
+      families: ['Conv_monogram','Conv_Minecraftia-Regular']
     }
+  });
+</script>
+<script src="./js/pixi.min.js"></script>
+<body></body>
 
-    //场景2绘制
-    function stage2(){   
-        var btn = new PIXI.Text('游戏开始',{
-          fontSize: 60,
-          fill: 0x000,
-          align: 'left'
-        });
-        btn.anchor.set(.5)
-        btn.x = w/2;
-        btn.y = 200;
-        btn.interactive = true;
-        btn.buttonMode = true;
-        gameContainer.addChild(btn);
+<script>
+
+  //var w = 375;//这个是iphone6-x 的宽度
+  //var h = 600;
+  var w = 750;
+  var h = 1200;
+
+  //创建实例
+  var app = new PIXI.Application({width:w,height: h,backgroundColor:0xffffff});
+  app.view.style.position = "absolute";
+  app.view.style.display = "block";
+  document.body.appendChild(app.view);
+  window.addEventListener('resize', resize);
+  function resize(){
+    //缩放
+    ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
+    //这个是解决缩放后文字变模糊的核心所在，之前的用法是错误的！
+    app.view.style.width = Math.ceil(w * ratio) + "px";
+    app.view.style.height = Math.ceil(h * ratio) + "px";
+    //app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
+    //所有的场景也要缩放
+    //indexContainer.scale.x = indexContainer.scale.y = ratio;
+    //gameContainer.scale.x = gameContainer.scale.y = ratio;
+    //authorContainer.scale.x = authorContainer.scale.y = ratio;
+    
+    //居中
+    var ratio2 = w/h;
+    if(window.innerWidth/window.innerHeight>w/h){
+      app.view.style.top = 0
+      app.view.style.left = (window.innerWidth-window.innerHeight*ratio2)/2+'px'
+    }else{
+      app.view.style.left = 0
+      app.view.style.top = (window.innerHeight-window.innerWidth/ratio2)/2+'px'
     }
+  }
+  resize();
+  PIXI.SCALE_MODES.DEFAULT = PIXI.SCALE_MODES.NEAREST;
 
-    //场景3绘制
-    function stage3(){
+  //创建容器（场景）
+  var background      = new PIXI.Container();
+  var indexContainer  = new PIXI.Container();
+  var gameContainer   = new PIXI.Container();
+  var authorContainer = new PIXI.Container();
 
-      // 如果加上下面这些，stage3被多次调用有重置场景的效果。看情况使用
-      // authorContainer = new PIXI.Container();
-      // resize();
+  //场景1绘制
+  function stage1(){
+      //创建背景图片
+      bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
+      bk.height = h;
+      background.addChild(bk);
+
       
-      var btn = new PIXI.Text('作者是一个画家，如果这里文字很长很长很长，我需要会折行的文字',{
-        //下面三行是实现文字折行的重要配置
-        //谷歌搜索 pixi text 查得 => https://pixijs.io/pixi-text-style/#
-        "breakWords": true,
-        "wordWrapWidth": w,
-        "wordWrap": true
+      //创建标题文字
+      var title = new PIXI.Text('新交大群侠传',{
+        fontFamily: 'Arial',
+        fontSize: 100,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fill: ['#ffffff', '#00ff99'], // gradient
+        stroke: '#4a1850',
+        strokeThickness: 5,
+        dropShadow: true,
+        dropShadowColor: '#000000',
+        dropShadowBlur: 4,
+        dropShadowAngle: Math.PI / 6,
+        dropShadowDistance: 6,
+        wordWrap: true,
+        wordWrapWidth: 440
       });
-      btn.anchor.set(.5)
-      btn.x = w/2;
-      btn.y = 200;
-      btn.interactive = true;
-      btn.buttonMode = true;
+      title.resolution = 2;
+      title.anchor.set(.5)
+      //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
+      //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
+      //或者把 resize(); 放在这里之后。
+      //title.x = app.screen.width/2;
+      title.x = w/2;
+      title.y = 100;
 
-      var btn2 = new PIXI.Text('返回首页',{
-        fontSize: 60,
-        fill: 0x000,
-        align: 'left'
+      //按钮文字1
+      var btn1 = new PIXI.Text('GAME Start',{
+        //fontFamily:"Conv_monogram",
+        fontFamily:"Conv_Minecraftia-Regular",
+        fontSize:32, 
+        padding:20
+      });
+      btn1.anchor.set(.5)
+      btn1.x = w/2;
+      btn1.y = 300;
+      btn1.interactive = true;
+      btn1.buttonMode = true;
+      btn1.on('tap', function(){
+        app.stage = gameContainer;
+      });
+      
+      //按钮文字2
+      var btn2 = new PIXI.Text('Author 介绍',{
+        fontSize: 60
       });
       btn2.anchor.set(.5)
       btn2.x = w/2;
@@ -179,70 +140,106 @@
       btn2.interactive = true;
       btn2.buttonMode = true;
       btn2.on('tap', function(){
-        app.stage = indexContainer;
+        app.stage = authorContainer;
       });
-      authorContainer.addChild(btn);
-      authorContainer.addChild(btn2);
-    }
 
-    //缩放
-    resize();
+      //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
+      indexContainer.addChild(background,title,btn1,btn2);
+      // indexContainer.addChildAt(background,0)
+      // indexContainer.addChildAt(title,1)
+      // indexContainer.addChildAt(btn1,2)
+      // indexContainer.addChildAt(btn2,3)
+  }
 
-    //资源加载
-    PIXI.loader
-      .add("background", "background.png")
-      .load(setup);
+  //场景2绘制
+  function stage2(){   
+      var btn = new PIXI.Text('游戏开始',{
+        fontSize: 60,
+        fill: 0x000,
+        align: 'left'
+      });
+      btn.anchor.set(.5)
+      btn.x = w/2;
+      btn.y = 200;
+      btn.interactive = true;
+      btn.buttonMode = true;
+      gameContainer.addChild(btn);
+  }
 
-    //加载后回调
-    function setup() {
+  //场景3绘制
+  function stage3(){
 
-      //完成3个场景的设置
-      stage1();
-      stage2();
-      stage3();
-      
-      //这两个都可以用
-      //app.stage.addChild(indexContainer);
+    // 如果加上下面这些，stage3被多次调用有重置场景的效果。看情况使用
+    // authorContainer = new PIXI.Container();
+    // resize();
+    
+    var btn = new PIXI.Text('作者是一个画家，如果这里文字很长很长很长，我需要会折行的文字',{
+      //下面三行是实现文字折行的重要配置
+      //谷歌搜索 pixi text 查得 => https://pixijs.io/pixi-text-style/#
+      "breakWords": true,
+      "wordWrapWidth": w,
+      "wordWrap": true
+    });
+    btn.anchor.set(.5)
+    btn.x = w/2;
+    btn.y = 200;
+    btn.interactive = true;
+    btn.buttonMode = true;
+
+    var btn2 = new PIXI.Text('返回首页',{
+      fontSize: 60,
+      fill: 0x000,
+      align: 'left'
+    });
+    btn2.anchor.set(.5)
+    btn2.x = w/2;
+    btn2.y = 400;
+    btn2.interactive = true;
+    btn2.buttonMode = true;
+    btn2.on('tap', function(){
       app.stage = indexContainer;
-      console.log(indexContainer)
+    });
+    authorContainer.addChild(btn);
+    authorContainer.addChild(btn2);
+  }
 
 
-      app.ticker.add(function(delta) {
-        //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
-        //indexContainer.children[1].x += delta/10;
-        //indexContainer.getChildAt(2).x += delta/10;
-      });
 
-    }
+  //资源加载
+  PIXI.loader
+    .add("background", "background.png")
+    .load(setup);
 
-    window.addEventListener('resize', resize);
+  //加载后回调
+  function setup() {
 
-    function resize(){
-      //缩放
-      ratio = Math.min(window.innerWidth/w,window.innerHeight/h);
-      
-      //这个是解决缩放后文字变模糊的核心所在，之前的用法是错误的！
-      app.view.style.width = Math.ceil(w * ratio) + "px";
-      app.view.style.height = Math.ceil(h * ratio) + "px";
-      
-      //app.renderer.resize(Math.ceil(w * ratio),Math.ceil(h * ratio));
-      //所有的场景也要缩放
-      //indexContainer.scale.x = indexContainer.scale.y = ratio;
-      //gameContainer.scale.x = gameContainer.scale.y = ratio;
-      //authorContainer.scale.x = authorContainer.scale.y = ratio;
-      
-      //居中
-      var ratio2 = w/h;
-      if(window.innerWidth/window.innerHeight>w/h){
-        app.view.style.top = 0
-        app.view.style.left = (window.innerWidth-window.innerHeight*ratio2)/2+'px'
-      }else{
-        app.view.style.left = 0
-        app.view.style.top = (window.innerHeight-window.innerWidth/ratio2)/2+'px'
-      }
+    //完成3个场景的设置
+    stage1();
+    stage2();
+    stage3();
+    
+    //这两个都可以用
+    //app.stage.addChild(indexContainer);
+    app.stage = indexContainer;
 
-    }
+    app.ticker.add(function(delta) {
+      //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
+      //indexContainer.children[1].x += delta/10;
+      //indexContainer.getChildAt(2).x += delta/10;
+    });
 
-  </script>
-</body>
+  }
+
+
+
+  //注意点：
+  //1 就是字体显示模糊的问题，已经解决。坑了我很久
+  //2 就是场景控制问题，
+  //1)比如只有一个场景，其他的内容都用容器的显示和隐藏来解决
+  //2)比如有多个场景，可以通过切换场景来进行
+  //3)那些内容是需要复位的，而那些是可以单独运行的，而时间计时器是如何在各个场景中运行的，这些都要搞明白
+
+  
+
+</script>
 
