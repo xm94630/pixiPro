@@ -94,10 +94,9 @@
 
   //各个场景中的状态改变器：
   function stage1_ticker(delta){
-      //这里可以对某个容器（场景中）的子元素进行索引，下面两个方法都可以，不过都很傻。还不如把子元素定义为全局的引用来的方便，如这里的background，再用getChildIndex获取index
-      //stage1.children[1].x += delta/10;
-      //stage1.getChildAt(2).x += delta/10;
-      stage1.children[4].x += delta/2;
+
+    //通过名字引用小鸟，不过这个名字需要自己定义好，这样子使用起来非常方便
+    stage1.getChildByName('anim').x += delta/2;
   }
   function stage2_ticker(){}
   function stage3_ticker(){}
@@ -180,6 +179,7 @@
     }
     var anim = new PIXI.extras.AnimatedSprite(frames);
     anim.x = 100;
+    anim.name="anim"; //起一个名字方便以后引用
     anim.y = app.screen.height / 2;
     anim.anchor.set(0.5);
     anim.animationSpeed = 0.25
@@ -187,12 +187,8 @@
     //这个有点像flash中的实现
     //anim.gotoAndStop(2);
 
-    //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
+    //场景（容器）添加元素
     stage1.addChild(background,title,btn1,btn2,anim);
-    // stage1.addChildAt(background,0)
-    // stage1.addChildAt(title,1)
-    // stage1.addChildAt(btn1,2)
-    // stage1.addChildAt(btn2,3)
   }
 
   //场景2绘制
