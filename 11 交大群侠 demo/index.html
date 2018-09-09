@@ -176,6 +176,33 @@
     });
 
 
+    //暂停按钮
+    var btn3 = new PIXI.Text('停止小鸟飞行和动画',{fontSize: 60});
+    btn3.anchor.set(.5)
+    btn3.x = w/2;
+    btn3.y = 1000;
+    btn3.interactive = true;
+    btn3.buttonMode = true;
+    btn3.on('tap', function(){
+      //状态改变器切换成空
+      myTicker = function(){};
+      //小鸟动画停止
+      stage1.getChildByName('anim').stop();
+    });
+    //继续按钮
+    var btn4 = new PIXI.Text('小鸟继续飞行和动画',{fontSize: 60});
+    btn4.anchor.set(.5)
+    btn4.x = w/2;
+    btn4.y = 1100;
+    btn4.interactive = true;
+    btn4.buttonMode = true;
+    btn4.on('tap', function(){
+      //状态改变器切换成stage1_ticker
+      myTicker = stage1_ticker
+      stage1.getChildByName('anim').play();
+    });
+
+
     //创建影片
     var n = Object.keys(res.monster.textures).length;
     var frames = [];
@@ -192,8 +219,10 @@
     //这个有点像flash中的实现
     //anim.gotoAndStop(2);
 
+    
+
     //场景（容器）添加元素
-    stage1.addChild(background,title,btn1,btn2,anim);
+    stage1.addChild(background,title,btn1,btn2,btn3,btn4,anim);
   }
 
   //场景2绘制
