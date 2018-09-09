@@ -105,95 +105,97 @@
   
   //场景1绘制
   function stage1_layout(res){
-      //创建背景图片
-      bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
-      bk.height = h;
-      background.addChild(bk);
-
-      //创建标题文字
-      var title = new PIXI.Text('新交大群侠传',{
-        fontFamily: 'Arial',
-        fontSize: 100,
-        fontStyle: 'italic',
-        fontWeight: 'bold',
-        fill: ['#ffffff', '#00ff99'], // gradient
-        stroke: '#4a1850',
-        strokeThickness: 5,
-        dropShadow: true,
-        dropShadowColor: '#000000',
-        dropShadowBlur: 4,
-        dropShadowAngle: Math.PI / 6,
-        dropShadowDistance: 6,
-        wordWrap: true,
-        wordWrapWidth: 440
-      });
-      title.resolution = 2;
-      title.anchor.set(.5)
-      //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
-      //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
-      //或者把 resize(); 放在这里之后。
-      //title.x = app.screen.width/2;
-      title.x = w/2;
-      title.y = 100;
-
-      //按钮文字1
-      var btn1 = new PIXI.Text('GAME Start',{
-        //fontFamily:"Conv_monogram",
-        fontFamily:"Conv_Minecraftia-Regular",
-        fontSize:32, 
-        padding:20
-      });
-      btn1.anchor.set(.5)
-      btn1.x = w/2;
-      btn1.y = 300;
-      btn1.interactive = true;
-      btn1.buttonMode = true;
-      btn1.on('tap', function(){
-        app.stage = stage2;
-      });
-      
-      //按钮文字2
-      var btn2 = new PIXI.Text('Author 介绍',{
-        fontSize: 60
-      });
-      btn2.anchor.set(.5)
-      btn2.x = w/2;
-      btn2.y = 400;
-      btn2.interactive = true;
-      btn2.buttonMode = true;
-      btn2.on('tap', function(){
-        app.stage = stage3;
-      });
 
 
-      //创建影片
-      var n = Object.keys(res.monster.textures).length;
-      var frames = [];
-      for (var i = 0; i < n; i++) {
-          frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
-      }
-      var anim = new PIXI.extras.AnimatedSprite(frames);
-      anim.x = 100;
-      anim.y = app.screen.height / 2;
-      anim.anchor.set(0.5);
-      anim.animationSpeed = 0.25
-      anim.play();
-      //这个有点像flash中的实现
-      //anim.gotoAndStop(2);
+    //创建背景图片
+    bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
+    bk.height = h;
+    background.addChild(bk);
+
+    //创建标题文字
+    var title = new PIXI.Text('新交大群侠传',{
+      fontFamily: 'Arial',
+      fontSize: 100,
+      fontStyle: 'italic',
+      fontWeight: 'bold',
+      fill: ['#ffffff', '#00ff99'], // gradient
+      stroke: '#4a1850',
+      strokeThickness: 5,
+      dropShadow: true,
+      dropShadowColor: '#000000',
+      dropShadowBlur: 4,
+      dropShadowAngle: Math.PI / 6,
+      dropShadowDistance: 6,
+      wordWrap: true,
+      wordWrapWidth: 440
+    });
+    title.resolution = 2;
+    title.anchor.set(.5)
+    //注意，这里被坑了下，官方demo是没有resize的，所以用 app.screen.width 是可以的
+    //其实我这里所有的定位，就根据最初的设定的w、h来进行处理就好
+    //或者把 resize(); 放在这里之后。
+    //title.x = app.screen.width/2;
+    title.x = w/2;
+    title.y = 100;
+
+    //按钮文字1
+    var btn1 = new PIXI.Text('GAME Start',{
+      //fontFamily:"Conv_monogram",
+      fontFamily:"Conv_Minecraftia-Regular",
+      fontSize:32, 
+      padding:20
+    });
+    btn1.anchor.set(.5)
+    btn1.x = w/2;
+    btn1.y = 300;
+    btn1.interactive = true;
+    btn1.buttonMode = true;
+    btn1.on('tap', function(){
+      app.stage = stage2;
+    });
+    
+    //按钮文字2
+    var btn2 = new PIXI.Text('Author 介绍',{
+      fontSize: 60
+    });
+    btn2.anchor.set(.5)
+    btn2.x = w/2;
+    btn2.y = 400;
+    btn2.interactive = true;
+    btn2.buttonMode = true;
+    btn2.on('tap', function(){
+      app.stage = stage3;
+    });
 
 
-
-
+    //创建影片
+    var n = Object.keys(res.monster.textures).length;
+    var frames = [];
+    for (var i = 0; i < n; i++) {
+        frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
+    }
+    var anim = new PIXI.extras.AnimatedSprite(frames);
+    anim.x = 100;
+    anim.y = app.screen.height / 2;
+    anim.anchor.set(0.5);
+    anim.animationSpeed = 0.25
+    anim.play();
+    //这个有点像flash中的实现
+    //anim.gotoAndStop(2);
 
 
 
 
-      //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
-      stage1.addChild(background,title,btn1,btn2,anim);
-      // stage1.addChildAt(background,0)
-      // stage1.addChildAt(title,1)
-      // stage1.addChildAt(btn1,2)
-      // stage1.addChildAt(btn2,3)
+
+
+
+
+    //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
+    stage1.addChild(background,title,btn1,btn2,anim);
+    // stage1.addChildAt(background,0)
+    // stage1.addChildAt(title,1)
+    // stage1.addChildAt(btn1,2)
+    // stage1.addChildAt(btn2,3)
   }
 
   //场景2绘制
