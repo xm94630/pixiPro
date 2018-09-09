@@ -96,7 +96,12 @@
   function stage1_ticker(delta){
 
     //通过名字引用小鸟，不过这个名字需要自己定义好，这样子使用起来非常方便
-    stage1.getChildByName('anim').x += delta/2;
+    var niao = stage1.getChildByName('anim');
+    niao.x += delta*2;
+    if(niao.x> w+niao.width/2){
+      niao.x = 0-niao.width/2;
+    }
+
   }
   function stage2_ticker(){}
   function stage3_ticker(){}
