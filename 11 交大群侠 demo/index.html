@@ -174,6 +174,7 @@
     btn2.buttonMode = true;
     btn2.on('pointerdown', function(){
       app.stage = stage3;
+      //注意这里一定要写上这两组，否者声音会被多次添加
       mySound.pause();
       mySound.play();
     });
@@ -296,7 +297,7 @@
     //播放背景音乐（但是不会在手机中触发，手机中需要在点击中触发的，所以我要找一个地方来触发下，比如“开始游戏按钮”之类）
     mySound = sounds['sounds/faerieFM.mp3']
     mySound.loop = true; //其他属性设置可以参考官网（注意区分sound.js、soundJS，我们是前者）
-    mySound.play();
+    mySound.play(); //这个在手机上第一次的时候并不会被触发
     //mySound.playFrom(0); //控制具体从哪里开始播放
 
     //资源加载
