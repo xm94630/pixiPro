@@ -106,6 +106,10 @@
   //场景1绘制
   function stage1_layout(res){
 
+    //这个是清空场景作用
+    //对于多次调用stage1_layout函数的时候，不会被反复地向舞台新增素材
+    //如果要保持场景的状态，stage1_layout函数仅仅需要调用一次，切换场景的时候，只要把它隐藏就好了。
+    stage1.removeChildren(0, stage1.children.length); 
 
     //创建背景图片
     bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
@@ -183,13 +187,6 @@
     //这个有点像flash中的实现
     //anim.gotoAndStop(2);
 
-
-
-
-
-
-
-
     //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
     stage1.addChild(background,title,btn1,btn2,anim);
     // stage1.addChildAt(background,0)
@@ -244,6 +241,9 @@
     btn2.interactive = true;
     btn2.buttonMode = true;
     btn2.on('tap', function(){
+      //如果再次调用这个布局函数的话，会进行重新布局，这样子，之前的动画啥的，就被清空了
+      stage1_layout(res)
+      
       app.stage = stage1;
     });
     stage3.addChild(btn);
