@@ -43,10 +43,7 @@
   var w = 750;
   var h = 1200;
 
-  //有些容器中的素材，为了引用方便，还是要放到全局变量，以后再想如何再做优化
-  var FRAMES;
-  var FRAMERATE = 5;
-  var frametime;
+
 
   //这个是很重要的一个函数，用于 app.ticker 之中。
   //当 myTicker 赋予不同的处理函数的时候，就会对对应的函数处理
@@ -101,24 +98,13 @@
       //stage1.children[1].x += delta/10;
       //stage1.getChildAt(2).x += delta/10;
       stage1.children[4].x += delta/2;
-      
-      // Animate the monster
-      frametime -= delta;
-      if (frametime <= 0) {
-        frameindex++;
-        if (frameindex >= FRAMES.length) {
-          frameindex = 0;
-        }
-        monster.texture = PIXI.Texture.fromFrame(FRAMES[frameindex]);
-        frametime = FRAMERATE;
-      }
   }
   function stage2_ticker(){}
   function stage3_ticker(){}
 
   
   //场景1绘制
-  function stage1_layout(){
+  function stage1_layout(res){
       //创建背景图片
       bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
       bk.height = h;
@@ -179,24 +165,31 @@
         app.stage = stage3;
       });
 
-      // Create the monster sprite
-      FRAMES = [
-        "frame-1.png",
-        "frame-2.png",
-        "frame-3.png",
-        "frame-4.png",
-      ];
-      monster = new PIXI.Sprite(PIXI.Texture.fromFrame(FRAMES[0]));
-      frameindex = 0;
-      frametime = FRAMERATE;
-      monster.anchor.x = 0.5;
-      monster.anchor.y = 0.5;
-      monster.position.x = 100-monster.width/2;
-      monster.position.y = h/2 - monster.height/2;
+
+      //创建影片
+      var n = Object.keys(res.monster.textures).length;
+      var frames = [];
+      for (var i = 0; i < n; i++) {
+          frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
+      }
+      var anim = new PIXI.extras.AnimatedSprite(frames);
+      anim.x = 100;
+      anim.y = app.screen.height / 2;
+      anim.anchor.set(0.5);
+      anim.animationSpeed = 0.25
+      anim.play();
+      //这个有点像flash中的实现
+      //anim.gotoAndStop(2);
+
+
+
+
+
+
 
 
       //添加元素，下面2个方法都是可行的，不过第二种有点傻，不能起一个别名吗，方便索引
-      stage1.addChild(background,title,btn1,btn2,monster);
+      stage1.addChild(background,title,btn1,btn2,anim);
       // stage1.addChildAt(background,0)
       // stage1.addChildAt(title,1)
       // stage1.addChildAt(btn1,2)
@@ -204,7 +197,7 @@
   }
 
   //场景2绘制
-  function stage2_layout(){   
+  function stage2_layout(res){   
       var btn = new PIXI.Text('游戏开始',{
         fontSize: 60,
         fill: 0x000,
@@ -219,7 +212,7 @@
   }
 
   //场景3绘制
-  function stage3_layout(){
+  function stage3_layout(res){
 
     // 如果加上下面这些，stage3被多次调用有重置场景的效果。看情况使用
     // stage3 = new PIXI.Container();
@@ -264,12 +257,12 @@
     .load(setup);
 
   //加载后回调
-  function setup() {
+  function setup(xxx,res) {
 
     //完成3个容器进行布局
-    stage1_layout();
-    stage2_layout();
-    stage3_layout();
+    stage1_layout(res);
+    stage2_layout(res);
+    stage3_layout(res);
     
     //把容器1进行展示
     //app.stage.addChild(stage1);
