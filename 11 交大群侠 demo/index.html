@@ -47,16 +47,7 @@
 
 
   //所有动画json文件的控制
-  var characterAnimation = {
-    "monster.json": {
-        "fly": [
-            "frame-1.png",
-            "frame-2.png",
-            "frame-3.png",
-            "frame-4.png",
-        ]
-    }
-  }
+  var characterAnimation = null;
 
 
   //这个是很重要的一个函数，用于 app.ticker 之中。
@@ -322,6 +313,8 @@
 
     //资源加载
     PIXI.loader
+      .add("characterAnimation", "characterAnimation.json")
+
       .add("background", "background.png")
       .add("monster", "monster.json")
       .load(setup);
@@ -329,6 +322,9 @@
 
   //加载后回调
   function setup(xxx,res) {
+
+    //这个配置文件是对所有动画json文件的维护，使用起来非常方便
+    characterAnimation = res['characterAnimation'].data;
 
     //完成3个容器进行布局
     stage1_layout(res);
