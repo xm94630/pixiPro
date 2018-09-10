@@ -46,6 +46,19 @@
   var mySound;
 
 
+  //所有动画json文件的控制
+  var characterAnimation = {
+    "monster.json": {
+        "fly": [
+            "frame-1.png",
+            "frame-2.png",
+            "frame-3.png",
+            "frame-4.png",
+        ]
+    }
+  }
+
+
   //这个是很重要的一个函数，用于 app.ticker 之中。
   //当 myTicker 赋予不同的处理函数的时候，就会对对应的函数处理
   //而不被处理的内容，状态就不会被改变，就好像被“暂停了”一样
@@ -206,13 +219,20 @@
     });
 
 
-
     //创建影片
     var n = Object.keys(res.monster.textures).length;
+
     var frames = [];
+    
+    // for (var i = 0; i < n; i++) {
+    //     frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
+    // }
+
+    //使用这个写法代替上述写法，具有很好的维护性
     for (var i = 0; i < n; i++) {
-        frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
+        frames.push(PIXI.Texture.fromFrame( characterAnimation['monster.json']['fly'][i] ));
     }
+
     var anim = new PIXI.extras.AnimatedSprite(frames);
     anim.x = 100;
     anim.name="anim"; //起一个名字方便以后引用
