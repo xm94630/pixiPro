@@ -139,9 +139,8 @@
     stage1.removeChildren(0, stage1.children.length); 
 
     //创建背景图片
-    bk =new PIXI.Sprite(PIXI.loader.resources.background.texture);
+    bk = new PIXI.Sprite(res.background.texture)
     bk.height = h;
-    background.addChild(bk);
 
     //创建标题文字
     var title = new PIXI.Text('新交大群侠传',{
@@ -283,7 +282,7 @@
     
 
     //场景（容器）添加元素
-    stage1.addChild(background,title,btn1,btn2,btn3,anim,soundBtns);
+    stage1.addChild(bk,title,btn1,btn2,btn3,anim,soundBtns);
   }
 
   //场景2绘制
@@ -340,6 +339,16 @@
     stage3.addChild(btn);
     stage3.addChild(btn2);
   }
+
+
+  
+  //创建背景图片
+  //bk =new PIXI.Sprite(参数是texture); //不能用这个，要用下面这个
+  //这里是在正式加载资源前渲染的简单界面（这里的资通过loader处理）
+  bk =PIXI.Sprite.fromImage("background.png")
+  bk.height = h;
+  app.stage.addChild(bk);
+
 
 
 
@@ -408,4 +417,8 @@
   // 容器的这个cacheAsBitmap属性设置为true的话，内容的元素就会不随时间的推移而改变，换句话说，就是状态就不会再发生变化了（表现为相对静止状态）
 
 </script>
+
+
+
+
 
