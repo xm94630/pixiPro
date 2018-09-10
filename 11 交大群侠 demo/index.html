@@ -149,7 +149,7 @@
     //或者把 resize(); 放在这里之后。
     //title.x = app.screen.width/2;
     title.x = w/2;
-    title.y = 100;
+    title.y = 150;
 
     //按钮文字1
     var btn1 = new PIXI.Text('GAME Start',{
@@ -184,7 +184,7 @@
     });
 
 
-    //暂停按钮
+    //动画暂停/继续按钮
     var btn3 = new PIXI.Text('stop',{fontSize: 60}); 
     btn3.anchor.set(.5)
     btn3.x = w/2;
@@ -209,18 +209,46 @@
       }
     });
 
+    //声音暂停/继续按钮
+    //var soundBtn = PIXI.Texture.fromFrame('icon-sound-on.png');//注意，如果只有单帧，不能用 PIXI.Texture.fromFrame
+    //var soundBtn = PIXI.Sprite.fromImage('icon-sound-on.png'); //单帧用这个。
+    //这里用影片剪辑来实现
+    var soundBtn = PIXI.Texture.fromFrame('icon-sound-on.png');
+    var soundBtnFrames=[];
+    for (var i = 0; i < characterAnimation['button.json']['soundBtn'].length; i++) {
+      soundBtnFrames.push(PIXI.Texture.fromFrame( characterAnimation['button.json']['soundBtn'][i] ));
+    }
+    var soundBtns = new PIXI.extras.AnimatedSprite(soundBtnFrames);
+    soundBtns.x = w-soundBtns.width/2-30;
+    soundBtns.y = soundBtns.height/2+30;
+    soundBtns.anchor.set(0.5);
+    soundBtns.gotoAndStop(0); //就像flash一样控制影片剪辑
+    soundBtns.interactive = true;
+    soundBtns.buttonMode = true;
+    soundBtns.scale.x = soundBtns.scale.y = 1.5;//放大一点，方便点击
+    var flag = false;
+    soundBtns.on('pointerdown', function(){
+      if(flag){
+        soundBtns.gotoAndStop(0);
+        mySound.play();
+        flag = false;
+      }else{
+        soundBtns.gotoAndStop(1);
+        mySound.pause();
+        flag = true;
+      }
+    });
+    
 
     //创建影片
-    var n = Object.keys(res.monster.textures).length;
-
     var frames = [];
-    
+
     // for (var i = 0; i < n; i++) {
     //     frames.push(PIXI.Texture.fromFrame('frame-' + (i+1) + '.png'));
     // }
 
     //使用这个写法代替上述写法，具有很好的维护性
-    for (var i = 0; i < n; i++) {
+    for (var i = 0; i < characterAnimation['monster.json']['fly'].length; i++) {
         frames.push(PIXI.Texture.fromFrame( characterAnimation['monster.json']['fly'][i] ));
     }
 
@@ -237,7 +265,7 @@
     
 
     //场景（容器）添加元素
-    stage1.addChild(background,title,btn1,btn2,btn3,anim);
+    stage1.addChild(background,title,btn1,btn2,btn3,anim,soundBtns);
   }
 
   //场景2绘制
@@ -311,13 +339,14 @@
     mySound.play(); //这个在手机上第一次的时候并不会被触发
     //mySound.playFrom(0); //控制具体从哪里开始播放
 
-    //资源加载
-    PIXI.loader
-      .add("characterAnimation", "characterAnimation.json")
+  //资源加载
+  PIXI.loader
+    .add("characterAnimation", "characterAnimation.json")
 
-      .add("background", "background.png")
-      .add("monster", "monster.json")
-      .load(setup);
+    .add("background", "background.png")
+    .add("monster", "monster.json")
+    .add("buttons", "buttons.json")
+    .load(setup);
   };
 
   //加载后回调

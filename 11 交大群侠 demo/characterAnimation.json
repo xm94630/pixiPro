@@ -7,4 +7,10 @@
             "frame-4.png"
         ]
     }
+    ,"button.json": {
+        "soundBtn": [
+            "icon-sound-on.png",
+            "icon-sound-off.png"
+        ]
+    }
 }
