@@ -56,6 +56,8 @@
   //所以所谓的“暂停”，无非就是某个场景的状态不被改变而已。
   //我之前在研究“faerieFM”的暂停的时候，一直找不到“暂停”的操作，后来一一排查，才恍然大悟！
   var myTicker = function(){}
+  //另外，这里一开始设置的是一个空函数，有的案例中，直接有内容的，会导致一上来就执行这个回调
+  //如果函数体中引用了没有赋值的元素就会出错，所以这种情况下，可用用 app.stop 来停止主帧的播放，需要的时候start就行
 
   //创建实例
   var app = new PIXI.Application({width:w,height: h,backgroundColor:0xffffff});
