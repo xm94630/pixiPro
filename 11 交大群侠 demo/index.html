@@ -341,24 +341,47 @@
   }
 
 
-  
-  //创建背景图片
-  //bk =new PIXI.Sprite(参数是texture); //不能用这个，要用下面这个
-  //这里是在正式加载资源前渲染的简单界面（这里的资通过loader处理）
-  bk =PIXI.Sprite.fromImage("background.png")
-  bk.height = h;
-  app.stage.addChild(bk);
 
 
+  //入口1
+  PIXI.loader
+    //优先加载一部分用来基础显示，然后再慢慢加载别的
+    .add("characterAnimation", "characterAnimation.json")
+    .add("background", "background.png")
+    .add("loadingBox", "loader.json")
+    .load(function(xxx,res){
 
+        //这个配置文件是对所有动画json文件的维护，使用起来非常方便
+        characterAnimation = res['characterAnimation'].data;
 
-  //入口
-  sounds.load([
-    "sounds/music.wav",
-    "sounds/splash.wav",
-    "sounds/faerieFM.mp3",
-    "sounds/alleySpectre.mp3"
-  ]);
+        //创建背景图片
+        bk =PIXI.Sprite.fromImage("background")
+        bk.height = h;
+
+        //创建进度条动画
+        var frames = [];
+        for (var i = 0; i < characterAnimation['loadingBox.json']['loadingBox'].length; i++) {
+            frames.push(PIXI.Texture.fromFrame( characterAnimation['loadingBox.json']['loadingBox'][i] ));
+        }
+        var loadingBox = new PIXI.extras.AnimatedSprite(frames);
+        loadingBox.name="loadingBoxm";
+        loadingBox.x = w / 2;
+        loadingBox.y = h / 2;
+        loadingBox.anchor.set(0.5);
+        loadingBox.animationSpeed = 0.25
+        loadingBox.play();
+        
+        app.stage.addChild(bk,loadingBox);
+
+        //入口2
+        sounds.load([
+          "sounds/music.wav",
+          "sounds/splash.wav",
+          "sounds/faerieFM.mp3",
+          "sounds/alleySpectre.mp3"
+        ]);
+    });
+
   sounds.whenLoaded = function(){
     //播放背景音乐（但是不会在手机中触发，手机中需要在点击中触发的，所以我要找一个地方来触发下，比如“开始游戏按钮”之类）
     mySound = sounds['sounds/faerieFM.mp3']
@@ -366,21 +389,15 @@
     mySound.play(); //这个在手机上第一次的时候并不会被触发
     //mySound.playFrom(0); //控制具体从哪里开始播放
 
-  //资源加载
-  PIXI.loader
-    .add("characterAnimation", "characterAnimation.json")
-
-    .add("background", "background.png")
-    .add("monster", "monster.json")
-    .add("buttons", "buttons.json")
-    .load(setup);
+    //资源加载
+    PIXI.loader
+      .add("monster", "monster.json")
+      .add("buttons", "buttons.json")
+      .load(setup);
   };
 
   //加载后回调
   function setup(xxx,res) {
-
-    //这个配置文件是对所有动画json文件的维护，使用起来非常方便
-    characterAnimation = res['characterAnimation'].data;
 
     //完成3个容器进行布局
     stage1_layout(res);
