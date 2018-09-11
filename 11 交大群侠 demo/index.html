@@ -125,6 +125,11 @@
     count += 0.1;
     niao.y = 600 + Math.sin(count)*50;
 
+    //这里实现一个文字忽大忽小的功能（我称之为“跳蹦床“效果）
+    //这个也算是缓动的效果，实现的不好看，后期可以专门开发一些好用的缓动
+    var controlBtn = stage1.getChildByName('controlBtn');
+    //controlBtn.scale.x=controlBtn.scale.y =  1+Math.abs(Math.sin(count/3))/4
+    
   }
   function stage2_ticker(){}
   function stage3_ticker(){}
@@ -209,6 +214,7 @@
     //动画暂停/继续按钮
     var btn3 = new PIXI.Text('stop',{fontSize: 60}); 
     btn3.anchor.set(.5)
+    btn3.name = "controlBtn";
     btn3.x = w/2;
     btn3.y = 1000;
     btn3.interactive = true;
