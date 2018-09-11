@@ -23,12 +23,13 @@ var T = {
   },
 
   //创建一个闭包
-  createSteps(fun,max,loop){
+  createSteps(fun,max,step,loop){
     var loop = loop || false; //false表示只运行一次，true表示无限循环
     var count = 0;
     
     return {
       perAdd:function(t){
+        t = t || step;
         count += t;
         if(count<=max){
           return fun(count);
@@ -47,7 +48,25 @@ var T = {
       }
     }
 
+  },
+
+  //自定义函数
+  ttFun(x){
+    if(x>=0 && x<1){
+      return x;
+    }else if(x>=1 && x<2){
+      return -x+2;
+    }else if(x>=2 && x<3){
+      return x-2;
+    }else if(x>=3 && x<4){
+      return -x+4;
+    }else if(x>=4){
+      return 0;
+    }else{
+      return 0;
+    }
   }
+
 }
 
 
