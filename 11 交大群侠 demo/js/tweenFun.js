@@ -9,42 +9,47 @@ var T = {
     }
   },
     //y轴缩放
-  yMod(fun,n){
+  yMod(fun,n,s){
     return function(x){
-      return n*fun(x);
+      return n*fun(x)+s;
     }
   },
   //xy轴同时缩放
-  xyMod(fun,m,n){
-    return this.yMod(this.xMod(fun,m),n);
+  xyMod(fun,m,n,s){
+    n = n || 1
+    m = m || 1
+    s = s || 0
+    return this.yMod(this.xMod(fun,m),n,s);
   },
-  //x轴截取
-  xMaxLimit(fun,max){
-    var m = Math.abs(max)
-    return function(x){
-      if(m){
-        if(x>m) x=m;
+
+  //创建一个闭包
+  createSteps(fun,max,loop){
+    var loop = loop || false; //false表示只运行一次，true表示无限循环
+    var count = 0;
+    
+    return {
+      perAdd:function(t){
+        count += t;
+        if(count<=max){
+          return fun(count);
+        }else{
+          if(loop){
+            yushu = count%max;
+            if(yushu==0){
+              return fun(max);
+            }else{
+              return fun(count%max);
+            }
+          }else{
+            return fun(max);
+          }
+        }
       }
-      return fun(x)
     }
-  },
-  //综合修改
-  mod(fun,m,n,max){
-    return this.xMaxLimit(this.xyMod(fun,m,n),max)
+
   }
 }
 
-
-
-
-
-
-// function xMod(fun,n){
-//   return function(x){
-//     var restArgs = Array.prototype.slice.call(arguments,1);
-//     return fun.call(null,[x/n].concat(restArgs))
-//   }
-// }
 
 
 

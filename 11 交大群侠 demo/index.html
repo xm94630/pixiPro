@@ -40,16 +40,12 @@
 
 <script>
 
-  
-
-
-
-
-
-
-
-
-
+  //小鸟缓动步调设置
+  var newSin    = T.xyMod(T.sin,2,50,600);
+  var birdSteps = T.createSteps(newSin,T.pi*4,true);
+  //文字缓动步调设置
+  var newSin2   = T.xyMod(T.sin,2,1/5,1);
+  var fontSteps = T.createSteps(newSin2,T.pi*4,true);
 
 
 
@@ -136,13 +132,16 @@
     //而且这样子的函数可以常见很多不可思议、有趣的效果。
     //可以自己写、也可以使用自己写的函数。我也恍然想起，我好像之前用函数式编程实现过这样子的函数。
 
-    count += 0.1;
-    niao.y = 600 + Math.sin(count)*50;
+    //自己实现的小鸟步调
+    niao.y = birdSteps.perAdd(0.1);
+
+
 
     //这里实现一个文字忽大忽小的功能（我称之为“跳蹦床“效果）
     //这个也算是缓动的效果，实现的不好看，后期可以专门开发一些好用的缓动
     var controlBtn = stage1.getChildByName('controlBtn');
     //controlBtn.scale.x=controlBtn.scale.y =  1+Math.abs(Math.sin(count/3))/4
+    controlBtn.scale.x = controlBtn.scale.y = fontSteps.perAdd(0.1)
     
   }
   function stage2_ticker(){}
@@ -221,12 +220,10 @@
     btn2.on('mouseover', function(){
       btn2.scale.x = 2;
       btn2.scale.y = 2;
-       console.log(btn2)
     });
     btn2.on('mouseout', function(){
       btn2.scale.x = 1;
       btn2.scale.y = 1;
-       console.log(btn2)
     });
 
     //动画暂停/继续按钮
