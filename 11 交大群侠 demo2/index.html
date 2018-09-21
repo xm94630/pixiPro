@@ -372,9 +372,9 @@
   //入口1
   PIXI.loader
     //优先加载一部分用来基础显示，然后再慢慢加载别的
-    .add("characterAnimation", "characterAnimation.json")
-    .add("background", "background.png")
-    .add("loadingBox", "loader.json")
+    .add("characterAnimation", "./img/characterAnimation.json")
+    .add("background", "./img/background.png")
+    .add("loadingBox", "./img/loader.json")
     .load(function(xxx,res){
 
         //这个配置文件是对所有动画json文件的维护，使用起来非常方便
@@ -417,8 +417,8 @@
 
     //资源加载
     PIXI.loader
-      .add("monster", "monster.json")
-      .add("buttons", "buttons.json")
+      .add("monster", "./img/monster.json")
+      .add("buttons", "./img/buttons.json")
       .load(setup);
   };
 
